@@ -1,9 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { StockData } from "@stock-signal/shared";
 import StockRow from "@/components/StockRow";
 import { fetchAPI } from "@/lib/api";
+
+interface StockData {
+  symbol: string;
+  name: string;
+  price: number;
+  change: number;
+  changePercent: number;
+  volume: number;
+  marketCap: number;
+  pe?: number;
+}
 
 interface TrendingStock {
   symbol: string;
@@ -31,22 +41,24 @@ export default function StocksPage() {
     try {
       setLoading(true);
       const stocksData = await fetchAPI("/api/stocks");
-      setStocks(stocksData);
+      setStocks((stocksData as StockData[]) || []);
 
       // Generate trending data based on sentiment analysis
+      const stocks_ = (stocksData as StockData[]) || [];
       const trending = await Promise.all(
-        stocksData.map(async (stock: StockData) => {
+        stocks_.map(async (stock: StockData) => {
           try {
             const signal = await fetchAPI(`/api/signals/${stock.symbol}`);
+            const signalData = signal as any;
             return {
               symbol: stock.symbol,
               price: stock.price,
               change: stock.change,
-              newsCount: signal.breakdown?.sentiment?.newsCount || 0,
-              sentiment: signal.breakdown?.sentiment?.summary?.includes("positive") ? "positive" :
-                        signal.breakdown?.sentiment?.summary?.includes("negative") ? "negative" : "neutral",
-              sentimentScore: signal.breakdown?.sentiment?.score || 0.5,
-              trend: getTrend(signal.breakdown?.sentiment?.newsCount || 0, signal.breakdown?.sentiment?.score || 0.5)
+              newsCount: signalData?.breakdown?.sentiment?.newsCount || 0,
+              sentiment: signalData?.breakdown?.sentiment?.summary?.includes("positive") ? "positive" :
+                        signalData?.breakdown?.sentiment?.summary?.includes("negative") ? "negative" : "neutral",
+              sentimentScore: signalData?.breakdown?.sentiment?.score || 0.5,
+              trend: getTrend(signalData?.breakdown?.sentiment?.newsCount || 0, signalData?.breakdown?.sentiment?.score || 0.5)
             };
           } catch {
             return {
@@ -61,7 +73,7 @@ export default function StocksPage() {
           }
         })
       );
-      setTrendingStocks(trending);
+      setTrendingStocks(trending as TrendingStock[]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load data");
     } finally {
@@ -263,7 +275,7 @@ export default function StocksPage() {
                     {stock.change >= 0 ? "+" : ""}{stock.change.toFixed(2)}%
                   </td>
                   <td style={{ padding: "12px", textAlign: "right", color: "#ffff00" }}>{(stock.volume / 1000000).toFixed(1)}M</td>
-                  <td style={{ padding: "12px", textAlign: "right", color: "#00ffff" }}>{stock.pe.toFixed(1)}</td>
+                  <td style={{ padding: "12px", textAlign: "right", color: "#00ffff" }}>{(stock.pe || 0).toFixed(1)}</td>
                 </tr>
               ))}
             </tbody>

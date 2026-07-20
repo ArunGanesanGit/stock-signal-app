@@ -1,9 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { TradingSignal } from "@stock-signal/shared";
 import SignalCard from "@/components/SignalCard";
 import { fetchAPI } from "@/lib/api";
+
+interface TradingSignal {
+  symbol: string;
+  signal: "buy" | "sell" | "hold";
+  confidence: number;
+  technicalScore: number;
+  sentimentScore: number;
+  entryPrice?: number;
+  targetPrice?: number;
+  stopLoss?: number;
+  reasons: string[];
+  expiresAt: string;
+}
 
 export default function SignalsPage() {
   const [signals, setSignals] = useState<TradingSignal[]>([]);
@@ -19,7 +31,7 @@ export default function SignalsPage() {
     try {
       setLoading(true);
       const data = await fetchAPI("/api/signals/active");
-      setSignals(data);
+      setSignals((data as TradingSignal[]) || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load signals");
     } finally {
@@ -75,7 +87,7 @@ export default function SignalsPage() {
       {!loading && filteredSignals.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredSignals.map(signal => (
-            <SignalCard key={signal.id} signal={signal} />
+            <SignalCard key={signal.symbol} signal={signal} />
           ))}
         </div>
       )}

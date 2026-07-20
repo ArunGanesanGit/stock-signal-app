@@ -1,5 +1,17 @@
-import { TradingSignal } from "@stock-signal/shared";
 import Link from "next/link";
+
+interface TradingSignal {
+  symbol: string;
+  signal: "buy" | "sell" | "hold";
+  confidence: number;
+  technicalScore: number;
+  sentimentScore: number;
+  entryPrice?: number;
+  targetPrice?: number;
+  stopLoss?: number;
+  reasons: string[];
+  expiresAt: string;
+}
 
 interface SignalCardProps {
   signal: TradingSignal;

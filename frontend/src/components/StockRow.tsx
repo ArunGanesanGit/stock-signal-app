@@ -1,5 +1,14 @@
-import { StockData } from "@stock-signal/shared";
 import Link from "next/link";
+
+interface StockData {
+  symbol: string;
+  name: string;
+  price: number;
+  change: number;
+  changePercent: number;
+  volume: number;
+  marketCap: number;
+}
 
 interface StockRowProps {
   stock: StockData;
