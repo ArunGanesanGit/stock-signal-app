@@ -1,0 +1,127 @@
+[
+  {
+    "symbol": "AAPL",
+    "rsi": 65,
+    "macd": {
+      "value": 2.34,
+      "signal": 1.89,
+      "histogram": 0.45
+    },
+    "bollingerBands": {
+      "upper": 198.50,
+      "middle": 185.25,
+      "lower": 172.00
+    },
+    "movingAverages": {
+      "ma20": 186.40,
+      "ma50": 182.10,
+      "ma200": 168.50
+    },
+    "adx": 42,
+    "stochastic": {
+      "k": 72,
+      "d": 68
+    },
+    "timestamp": "2026-07-20T16:00:00Z"
+  },
+  {
+    "symbol": "MSFT",
+    "rsi": 58,
+    "macd": {
+      "value": 5.12,
+      "signal": 4.87,
+      "histogram": 0.25
+    },
+    "bollingerBands": {
+      "upper": 445.50,
+      "middle": 420.25,
+      "lower": 395.00
+    },
+    "movingAverages": {
+      "ma20": 425.80,
+      "ma50": 415.30,
+      "ma200": 385.20
+    },
+    "adx": 38,
+    "stochastic": {
+      "k": 55,
+      "d": 52
+    },
+    "timestamp": "2026-07-20T16:00:00Z"
+  },
+  {
+    "symbol": "GOOGL",
+    "rsi": 42,
+    "macd": {
+      "value": -1.45,
+      "signal": -0.98,
+      "histogram": -0.47
+    },
+    "bollingerBands": {
+      "upper": 175.20,
+      "middle": 162.50,
+      "lower": 149.80
+    },
+    "movingAverages": {
+      "ma20": 164.15,
+      "ma50": 168.40,
+      "ma200": 155.80
+    },
+    "adx": 35,
+    "stochastic": {
+      "k": 38,
+      "d": 42
+    },
+    "timestamp": "2026-07-20T16:00:00Z"
+  },
+  {
+    "symbol": "TSLA",
+    "rsi": 72,
+    "macd": {
+      "value": 8.92,
+      "signal": 7.45,
+      "histogram": 1.47
+    },
+    "bollingerBands": {
+      "upper": 268.50,
+      "middle": 245.20,
+      "lower": 221.90
+    },
+    "movingAverages": {
+      "ma20": 242.30,
+      "ma50": 235.80,
+      "ma200": 210.50
+    },
+    "adx": 58,
+    "stochastic": {
+      "k": 78,
+      "d": 74
+    },
+    "timestamp": "2026-07-20T16:00:00Z"
+  },
+  {
+    "symbol": "AMZN",
+    "rsi": 61,
+    "macd": {
+      "value": 3.78,
+      "signal": 3.21,
+      "histogram": 0.57
+    },
+    "bollingerBands": {
+      "upper": 210.80,
+      "middle": 195.40,
+      "lower": 180.00
+    },
+    "movingAverages": {
+      "ma20": 196.50,
+      "ma50": 190.20,
+      "ma200": 175.80
+    },
+    "adx": 44,
+    "stochastic": {
+      "k": 65,
+      "d": 61
+    },
+    "timestamp": "2026-07-20T16:00:00Z"
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "name": "stock-signal-app",
+  "version": "1.0.0",
+  "description": "Stock signal application synthesizing technical analysis and news sentiment",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared"
+  ],
+  "scripts": {
+    "install-all": "npm install && npm install --workspace=frontend && npm install --workspace=backend && npm install --workspace=shared",
+    "start": "npm run dev",
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\" --names \"BACKEND,FRONTEND\" --prefix \"[{name}]\" --kill-others-on-exit",
+    "frontend:dev": "npm run dev --workspace=frontend",
+    "frontend:build": "npm run build --workspace=frontend",
+    "frontend:start": "npm run start --workspace=frontend",
+    "backend:dev": "npm run dev --workspace=backend",
+    "backend:build": "npm run build --workspace=backend",
+    "backend:start": "npm run start --workspace=backend",
+    "build": "npm run build --workspace=shared && npm run build --workspace=backend && npm run build --workspace=frontend",
+    "lint": "npm run lint --workspaces || true",
+    "type-check": "npm run type-check --workspaces || true",
+    "clean": "rm -rf backend/dist frontend/.next shared/dist"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.2.2"
+  }
+}

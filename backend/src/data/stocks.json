@@ -1,0 +1,67 @@
+[
+  {
+    "symbol": "AAPL",
+    "price": 189.95,
+    "change": 2.45,
+    "changePercent": 1.31,
+    "volume": 52340000,
+    "high52Week": 199.62,
+    "low52Week": 124.17,
+    "marketCap": 2890000000000,
+    "pe": 32.5,
+    "eps": 5.85,
+    "lastUpdated": "2026-07-20T16:00:00Z"
+  },
+  {
+    "symbol": "MSFT",
+    "price": 428.75,
+    "change": 1.25,
+    "changePercent": 0.29,
+    "volume": 18500000,
+    "high52Week": 453.92,
+    "low52Week": 309.62,
+    "marketCap": 3180000000000,
+    "pe": 38.2,
+    "eps": 11.23,
+    "lastUpdated": "2026-07-20T16:00:00Z"
+  },
+  {
+    "symbol": "GOOGL",
+    "price": 165.42,
+    "change": -1.58,
+    "changePercent": -0.94,
+    "volume": 24120000,
+    "high52Week": 203.76,
+    "low52Week": 125.30,
+    "marketCap": 2050000000000,
+    "pe": 25.4,
+    "eps": 6.51,
+    "lastUpdated": "2026-07-20T16:00:00Z"
+  },
+  {
+    "symbol": "TSLA",
+    "price": 245.30,
+    "change": 5.20,
+    "changePercent": 2.17,
+    "volume": 102150000,
+    "high52Week": 299.29,
+    "low52Week": 138.80,
+    "marketCap": 780000000000,
+    "pe": 68.5,
+    "eps": 3.58,
+    "lastUpdated": "2026-07-20T16:00:00Z"
+  },
+  {
+    "symbol": "AMZN",
+    "price": 198.65,
+    "change": 3.15,
+    "changePercent": 1.61,
+    "volume": 41200000,
+    "high52Week": 202.51,
+    "low52Week": 81.43,
+    "marketCap": 2050000000000,
+    "pe": 68.9,
+    "eps": 2.88,
+    "lastUpdated": "2026-07-20T16:00:00Z"
+  }
+]

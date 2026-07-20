@@ -1,0 +1,68 @@
+[
+  {
+    "id": "news-1",
+    "symbol": "AAPL",
+    "title": "Apple reports record quarterly revenue driven by iPhone sales",
+    "source": "Bloomberg",
+    "url": "https://bloomberg.com/news/articles/...",
+    "publishedAt": "2026-07-20T14:30:00Z",
+    "summary": "Apple exceeded analyst expectations with strong iPhone 15 sales and services revenue growth",
+    "sentiment": "positive",
+    "sentimentScore": 0.85
+  },
+  {
+    "id": "news-2",
+    "symbol": "AAPL",
+    "title": "Supply chain concerns impact Apple's upcoming product launch",
+    "source": "Reuters",
+    "url": "https://reuters.com/news/...",
+    "publishedAt": "2026-07-20T12:15:00Z",
+    "summary": "Industry analysts warn of potential delays in Apple's new product lineup due to component shortages",
+    "sentiment": "negative",
+    "sentimentScore": -0.42
+  },
+  {
+    "id": "news-3",
+    "symbol": "MSFT",
+    "title": "Microsoft's AI initiatives show promise in enterprise segment",
+    "source": "TechCrunch",
+    "url": "https://techcrunch.com/...",
+    "publishedAt": "2026-07-20T13:45:00Z",
+    "summary": "Enterprise customers express strong interest in Microsoft's new AI-powered productivity tools",
+    "sentiment": "positive",
+    "sentimentScore": 0.78
+  },
+  {
+    "id": "news-4",
+    "symbol": "TSLA",
+    "title": "Tesla announces expansion of Gigafactory Berlin operations",
+    "source": "Reuters",
+    "url": "https://reuters.com/news/...",
+    "publishedAt": "2026-07-20T11:00:00Z",
+    "summary": "Tesla increases production capacity in Europe as European EV demand surges",
+    "sentiment": "positive",
+    "sentimentScore": 0.82
+  },
+  {
+    "id": "news-5",
+    "symbol": "GOOGL",
+    "title": "Google faces antitrust challenges in search market",
+    "source": "WSJ",
+    "url": "https://wsj.com/articles/...",
+    "publishedAt": "2026-07-20T10:30:00Z",
+    "summary": "Regulatory bodies scrutinize Google's search engine practices and market dominance",
+    "sentiment": "negative",
+    "sentimentScore": -0.65
+  },
+  {
+    "id": "news-6",
+    "symbol": "AMZN",
+    "title": "Amazon AWS continues to dominate cloud market",
+    "source": "VentureBeat",
+    "url": "https://venturebeat.com/...",
+    "publishedAt": "2026-07-20T09:15:00Z",
+    "summary": "AWS maintains market leadership with strong quarterly results in cloud services",
+    "sentiment": "positive",
+    "sentimentScore": 0.72
+  }
+]

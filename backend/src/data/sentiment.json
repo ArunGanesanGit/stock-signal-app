@@ -1,0 +1,52 @@
+[
+  {
+    "symbol": "AAPL",
+    "overallSentiment": "positive",
+    "sentimentScore": 0.72,
+    "newsCount": 45,
+    "positiveNews": 28,
+    "negativeNews": 8,
+    "neutralNews": 9,
+    "lastAnalyzed": "2026-07-20T15:30:00Z"
+  },
+  {
+    "symbol": "MSFT",
+    "overallSentiment": "positive",
+    "sentimentScore": 0.65,
+    "newsCount": 38,
+    "positiveNews": 22,
+    "negativeNews": 9,
+    "neutralNews": 7,
+    "lastAnalyzed": "2026-07-20T15:30:00Z"
+  },
+  {
+    "symbol": "GOOGL",
+    "overallSentiment": "neutral",
+    "sentimentScore": 0.42,
+    "newsCount": 52,
+    "positiveNews": 18,
+    "negativeNews": 22,
+    "neutralNews": 12,
+    "lastAnalyzed": "2026-07-20T15:30:00Z"
+  },
+  {
+    "symbol": "TSLA",
+    "overallSentiment": "positive",
+    "sentimentScore": 0.68,
+    "newsCount": 67,
+    "positiveNews": 35,
+    "negativeNews": 18,
+    "neutralNews": 14,
+    "lastAnalyzed": "2026-07-20T15:30:00Z"
+  },
+  {
+    "symbol": "AMZN",
+    "overallSentiment": "neutral",
+    "sentimentScore": 0.51,
+    "newsCount": 41,
+    "positiveNews": 17,
+    "negativeNews": 16,
+    "neutralNews": 8,
+    "lastAnalyzed": "2026-07-20T15:30:00Z"
+  }
+]

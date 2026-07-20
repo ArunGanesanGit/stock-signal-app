@@ -1,0 +1,258 @@
+"use client";
+
+import { useState } from "react";
+import { fetchAPI } from "@/lib/api";
+
+interface SignalData {
+  signal: "buy" | "sell" | "hold";
+  confidence: number;
+  breakdown: {
+    technical: {
+      score: number;
+      rsi: { value: number; interpretation: string };
+      sma: { interpretation: string };
+      momentum: { value: number; direction: string };
+      summary: string;
+    };
+    sentiment: {
+      score: number;
+      summary: string;
+      newsCount: number;
+      positiveRatio: number;
+    };
+    combined: {
+      reasons: string[];
+      priceTargets: {
+        entry: number;
+        target: number;
+        stopLoss: number;
+      } | null;
+    };
+  };
+}
+
+export default function SignalDashboard() {
+  const [ticker, setTicker] = useState("");
+  const [signal, setSignal] = useState<SignalData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!ticker.trim()) {
+      setError("Please enter a ticker symbol");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await fetchAPI<SignalData>(`/api/signals/${ticker.toUpperCase()}`);
+      setSignal(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to fetch signal");
+      setSignal(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getSignalColor = (sig: "buy" | "sell" | "hold") => {
+    switch (sig) {
+      case "buy":
+        return { text: "#00ff00", bg: "#001a00", border: "#00ff00" };
+      case "sell":
+        return { text: "#ff0000", bg: "#1a0000", border: "#ff0000" };
+      case "hold":
+        return { text: "#ffff00", bg: "#1a1a00", border: "#ffff00" };
+    }
+  };
+
+  const colors = signal ? getSignalColor(signal.signal) : null;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      {/* Search Form */}
+      <form onSubmit={handleSearch} style={{ backgroundColor: "#0a0a0a", padding: "16px", borderRadius: "4px", border: "1px solid #0088ff" }}>
+        <label style={{ display: "block", fontSize: "11px", fontWeight: "bold", marginBottom: "8px", color: "#00ffff" }}>Stock Ticker</label>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <input
+            type="text"
+            value={ticker}
+            onChange={(e) => setTicker(e.target.value)}
+            placeholder="e.g., AAPL, MSFT, TSLA"
+            style={{
+              flex: 1,
+              padding: "8px 12px",
+              border: "1px solid #0088ff",
+              borderRadius: "4px",
+              backgroundColor: "#1a1a1a",
+              color: "#00ff00",
+              fontSize: "11px",
+            }}
+            disabled={loading}
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            style={{
+              padding: "8px 16px",
+              backgroundColor: "#0088ff",
+              color: "#000000",
+              borderRadius: "4px",
+              border: "1px solid #00ff00",
+              fontSize: "11px",
+              fontWeight: "bold",
+              cursor: "pointer",
+              opacity: loading ? 0.5 : 1,
+            }}
+          >
+            {loading ? "Analyzing..." : "Analyze"}
+          </button>
+        </div>
+        <p style={{ fontSize: "10px", color: "#ffff00", marginTop: "8px" }}>Available: AAPL, MSFT, GOOGL, TSLA, AMZN</p>
+      </form>
+
+      {/* Error Message */}
+      {error && (
+        <div style={{ backgroundColor: "#1a0000", border: "1px solid #ff0000", padding: "12px", borderRadius: "4px" }}>
+          <p style={{ color: "#ff0000", fontWeight: "bold", fontSize: "11px" }}>Error</p>
+          <p style={{ color: "#ff0000", fontSize: "10px" }}>{error}</p>
+        </div>
+      )}
+
+      {/* Signal Result */}
+      {signal && colors && (
+        <div style={{ backgroundColor: colors.bg, border: `1px solid ${colors.border}`, borderRadius: "4px", padding: "16px" }}>
+          {/* Header */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
+            <div>
+              <p style={{ color: "#00ffff", fontSize: "11px" }}>Signal for {ticker.toUpperCase()}</p>
+              <p style={{ fontSize: "24px", fontWeight: "bold", color: colors.text, textTransform: "uppercase" }}>
+                {signal.signal}
+              </p>
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <p style={{ fontSize: "24px", fontWeight: "bold", color: colors.text }}>
+                {(signal.confidence * 100).toFixed(0)}%
+              </p>
+              <p style={{ color: "#ffff00", fontSize: "10px" }}>Confidence</p>
+            </div>
+          </div>
+
+          {/* Two Column Layout */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
+            {/* Technical Analysis */}
+            <div style={{ backgroundColor: "#1a1a1a", borderRadius: "4px", padding: "12px", border: "1px solid #0088ff" }}>
+              <h3 style={{ fontWeight: "bold", color: "#00ff00", fontSize: "12px", marginBottom: "8px" }}>📊 Technical Analysis</h3>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "11px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span style={{ color: "#ffff00" }}>RSI (14)</span>
+                  <span style={{ color: "#00ffff", fontWeight: "bold" }}>{signal.breakdown.technical.rsi.value}</span>
+                </div>
+                <p style={{ color: "#00ff00", fontSize: "10px" }}>
+                  {signal.breakdown.technical.rsi.interpretation}
+                </p>
+
+                <div style={{ display: "flex", justifyContent: "space-between", paddingTop: "8px" }}>
+                  <span style={{ color: "#ffff00" }}>Momentum</span>
+                  <span style={{ color: "#00ffff", fontWeight: "bold" }}>
+                    {signal.breakdown.technical.momentum.direction}
+                  </span>
+                </div>
+
+                <div style={{ display: "flex", justifyContent: "space-between", paddingTop: "8px" }}>
+                  <span style={{ color: "#ffff00" }}>Moving Averages</span>
+                  <span style={{ fontSize: "10px", textAlign: "right", color: "#00ffff", fontWeight: "bold" }}>
+                    {signal.breakdown.technical.sma.interpretation}
+                  </span>
+                </div>
+
+                <div style={{ marginTop: "8px", padding: "8px", backgroundColor: "#0a0a0a", borderRadius: "4px", border: "1px solid #ff00ff" }}>
+                  <p style={{ color: "#ff00ff", fontWeight: "bold", fontSize: "10px" }}>Score</p>
+                  <p style={{ fontSize: "14px", fontWeight: "bold", color: "#00ff00" }}>
+                    {(signal.breakdown.technical.score * 100).toFixed(0)}%
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Sentiment Analysis */}
+            <div style={{ backgroundColor: "#1a1a1a", borderRadius: "4px", padding: "12px", border: "1px solid #ff00ff" }}>
+              <h3 style={{ fontWeight: "bold", color: "#00ffff", fontSize: "12px", marginBottom: "8px" }}>📰 Sentiment Analysis</h3>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "11px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span style={{ color: "#ffff00" }}>News Count</span>
+                  <span style={{ color: "#00ff00", fontWeight: "bold" }}>{signal.breakdown.sentiment.newsCount}</span>
+                </div>
+
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span style={{ color: "#ffff00" }}>Positive Ratio</span>
+                  <span style={{ color: "#00ff00", fontWeight: "bold" }}>
+                    {(signal.breakdown.sentiment.positiveRatio * 100).toFixed(0)}%
+                  </span>
+                </div>
+
+                <div style={{ paddingTop: "8px" }}>
+                  <p style={{ color: "#ffff00", fontSize: "10px", marginBottom: "4px" }}>Summary</p>
+                  <p style={{ color: "#00ffff", fontSize: "10px" }}>
+                    {signal.breakdown.sentiment.summary}
+                  </p>
+                </div>
+
+                <div style={{ marginTop: "8px", padding: "8px", backgroundColor: "#0a0a0a", borderRadius: "4px", border: "1px solid #00ff00" }}>
+                  <p style={{ color: "#00ff00", fontWeight: "bold", fontSize: "10px" }}>Score</p>
+                  <p style={{ fontSize: "14px", fontWeight: "bold", color: "#ff00ff" }}>
+                    {(signal.breakdown.sentiment.score * 100).toFixed(0)}%
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Reasons */}
+          <div style={{ marginTop: "16px", backgroundColor: "#0a0a0a", borderRadius: "4px", padding: "12px", border: "1px solid #00ff00" }}>
+            <h3 style={{ fontWeight: "bold", color: "#00ff00", marginBottom: "8px", fontSize: "12px" }}>🎯 Key Reasons</h3>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "6px" }}>
+              {signal.breakdown.combined.reasons.map((reason, idx) => (
+                <li key={idx} style={{ display: "flex", alignItems: "flex-start", fontSize: "11px" }}>
+                  <span style={{ fontWeight: "bold", marginRight: "8px", color: colors.text }}>✓</span>
+                  <span style={{ color: "#00ffff" }}>{reason}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Price Targets */}
+          {signal.breakdown.combined.priceTargets && (
+            <div style={{ marginTop: "16px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
+              <div style={{ backgroundColor: "#1a1a1a", borderRadius: "4px", padding: "12px", textAlign: "center", border: "1px solid #0088ff" }}>
+                <p style={{ color: "#00ff00", fontSize: "10px", fontWeight: "bold" }}>Entry</p>
+                <p style={{ fontSize: "14px", fontWeight: "bold", color: "#00ffff" }}>${signal.breakdown.combined.priceTargets.entry.toFixed(2)}</p>
+              </div>
+              <div style={{ backgroundColor: "#1a1a1a", borderRadius: "4px", padding: "12px", textAlign: "center", border: "1px solid #00ff00" }}>
+                <p style={{ color: "#00ff00", fontSize: "10px", fontWeight: "bold" }}>Target</p>
+                <p style={{ fontSize: "14px", fontWeight: "bold", color: "#00ff00" }}>${signal.breakdown.combined.priceTargets.target.toFixed(2)}</p>
+              </div>
+              <div style={{ backgroundColor: "#1a1a1a", borderRadius: "4px", padding: "12px", textAlign: "center", border: "1px solid #ff0000" }}>
+                <p style={{ color: "#ff0000", fontSize: "10px", fontWeight: "bold" }}>Stop Loss</p>
+                <p style={{ fontSize: "14px", fontWeight: "bold", color: "#ff0000" }}>${signal.breakdown.combined.priceTargets.stopLoss.toFixed(2)}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Empty State */}
+      {!signal && !error && !loading && (
+        <div style={{ backgroundColor: "#0a0a0a", border: "1px solid #0088ff", padding: "32px", borderRadius: "4px", textAlign: "center" }}>
+          <p style={{ color: "#00ffff", fontSize: "13px", fontWeight: "bold", marginBottom: "8px" }}>Ready to Analyze</p>
+          <p style={{ color: "#00ff00", fontSize: "11px" }}>Enter a stock ticker to get a detailed trading signal with technical and sentiment breakdown.</p>
+        </div>
+      )}
+    </div>
+  );
+}

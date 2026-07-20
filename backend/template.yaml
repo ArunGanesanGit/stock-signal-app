@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Stock Signal API - AWS SAM Template
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 256
+    Runtime: nodejs18.x
+    Architectures:
+      - x86_64
+    Environment:
+      Variables:
+        NODE_ENV: production
+        USE_MOCK_DATA: true
+
+Resources:
+  StockSignalApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: stock-signal-api
+      CodeUri: ./
+      Handler: dist/handler.handler
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref StockSignalApi
+            Path: /{proxy+}
+            Method: ANY
+        RootApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref StockSignalApi
+            Path: /
+            Method: ANY
+      BuildMethod: makefile
+
+  StockSignalApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: stock-signal-api
+      StageName: prod
+      Cors:
+        AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowOrigin: "'*'"
+
+  ApiLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${StockSignalApiFunction}'
+      RetentionInDays: 7
+
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway endpoint URL
+    Value: !Sub 'https://${StockSignalApi}.execute-api.${AWS::Region}.amazonaws.com/prod/'
+  FunctionArn:
+    Description: Lambda Function ARN
+    Value: !GetAtt StockSignalApiFunction.Arn

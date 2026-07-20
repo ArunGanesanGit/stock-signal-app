@@ -1,0 +1,93 @@
+[
+  {
+    "id": "signal-1",
+    "symbol": "AAPL",
+    "signal": "buy",
+    "confidence": 0.78,
+    "technicalScore": 0.75,
+    "sentimentScore": 0.82,
+    "reasons": [
+      "RSI indicates oversold conditions at 65",
+      "MACD histogram positive and rising",
+      "Positive sentiment from recent news",
+      "Price above 20-day moving average"
+    ],
+    "entryPrice": 189.95,
+    "targetPrice": 210.00,
+    "stopLoss": 175.00,
+    "createdAt": "2026-07-20T16:00:00Z",
+    "expiresAt": "2026-07-27T16:00:00Z"
+  },
+  {
+    "id": "signal-2",
+    "symbol": "TSLA",
+    "signal": "buy",
+    "confidence": 0.82,
+    "technicalScore": 0.85,
+    "sentimentScore": 0.78,
+    "reasons": [
+      "Strong RSI at 72 indicates bullish momentum",
+      "Stochastic K line in overbought territory",
+      "Positive news about factory expansion",
+      "ADX shows strong trend continuation"
+    ],
+    "entryPrice": 245.30,
+    "targetPrice": 280.00,
+    "stopLoss": 225.00,
+    "createdAt": "2026-07-20T16:00:00Z",
+    "expiresAt": "2026-07-27T16:00:00Z"
+  },
+  {
+    "id": "signal-3",
+    "symbol": "GOOGL",
+    "signal": "sell",
+    "confidence": 0.71,
+    "technicalScore": 0.68,
+    "sentimentScore": 0.65,
+    "reasons": [
+      "RSI at 42 indicates weakening momentum",
+      "MACD histogram negative",
+      "Negative sentiment from antitrust concerns",
+      "Price trading below 50-day moving average"
+    ],
+    "entryPrice": 165.42,
+    "targetPrice": 145.00,
+    "stopLoss": 180.00,
+    "createdAt": "2026-07-20T16:00:00Z",
+    "expiresAt": "2026-07-27T16:00:00Z"
+  },
+  {
+    "id": "signal-4",
+    "symbol": "MSFT",
+    "signal": "hold",
+    "confidence": 0.64,
+    "technicalScore": 0.62,
+    "sentimentScore": 0.65,
+    "reasons": [
+      "RSI at 58 suggests neutral positioning",
+      "MACD showing weak positive momentum",
+      "Mixed sentiment on AI initiatives",
+      "Price consolidating near 50-day moving average"
+    ],
+    "entryPrice": 428.75,
+    "createdAt": "2026-07-20T16:00:00Z",
+    "expiresAt": "2026-07-27T16:00:00Z"
+  },
+  {
+    "id": "signal-5",
+    "symbol": "AMZN",
+    "signal": "hold",
+    "confidence": 0.59,
+    "technicalScore": 0.58,
+    "sentimentScore": 0.60,
+    "reasons": [
+      "RSI at 61 indicates neutral conditions",
+      "Bollinger Bands wide suggesting volatility",
+      "Neutral sentiment on cloud market",
+      "Price holding above 200-day moving average"
+    ],
+    "entryPrice": 198.65,
+    "createdAt": "2026-07-20T16:00:00Z",
+    "expiresAt": "2026-07-27T16:00:00Z"
+  }
+]
