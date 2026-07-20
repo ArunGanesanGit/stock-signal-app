@@ -1,7 +1,15 @@
 "use client";
 
-import { PortfolioItem } from "@stock-signal/shared";
 import { useState } from "react";
+
+interface PortfolioItem {
+  symbol: string;
+  quantity: number;
+  purchasePrice: number;
+  currentPrice: number;
+  gain: number;
+  gainPercent: number;
+}
 
 export default function PortfolioPage() {
   const [portfolio] = useState<PortfolioItem[]>([
