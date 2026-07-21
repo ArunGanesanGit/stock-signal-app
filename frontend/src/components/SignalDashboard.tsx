@@ -226,6 +226,33 @@ export default function SignalDashboard() {
             </ul>
           </div>
 
+          {/* Recent News Articles */}
+          {signal.breakdown.sentiment.recentArticles && signal.breakdown.sentiment.recentArticles.length > 0 && (
+            <div style={{ marginTop: "16px", backgroundColor: "#0a0a0a", borderRadius: "4px", padding: "12px", border: "1px solid #00ffff" }}>
+              <h3 style={{ fontWeight: "bold", color: "#00ffff", marginBottom: "12px", fontSize: "12px" }}>📰 Recent News Impact</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                {signal.breakdown.sentiment.recentArticles.map((article, idx) => (
+                  <div key={idx} style={{ padding: "10px", backgroundColor: "#1a1a1a", borderRadius: "4px", border: `1px solid ${article.sentiment === "positive" ? "#00ff00" : article.sentiment === "negative" ? "#ff0000" : "#ffff00"}` }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "6px" }}>
+                      <a href={article.url} target="_blank" rel="noopener noreferrer" style={{ color: "#00ffff", textDecoration: "none", flex: 1, fontSize: "11px", fontWeight: "bold", marginRight: "8px" }}>
+                        {article.title}
+                      </a>
+                      <span style={{ fontSize: "9px", color: article.sentiment === "positive" ? "#00ff00" : article.sentiment === "negative" ? "#ff0000" : "#ffff00", fontWeight: "bold", whiteSpace: "nowrap" }}>
+                        {article.sentiment.toUpperCase()}
+                      </span>
+                    </div>
+                    <p style={{ fontSize: "9px", color: "#888888", margin: "4px 0" }}>
+                      {article.source} • {new Date(article.publishedAt).toLocaleDateString()}
+                    </p>
+                    <p style={{ fontSize: "10px", color: "#cccccc", lineHeight: "1.4" }}>
+                      {article.summary.substring(0, 150)}...
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Price Targets */}
           {signal.breakdown.combined.priceTargets && (
             <div style={{ marginTop: "16px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
