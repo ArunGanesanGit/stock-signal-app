@@ -4,15 +4,15 @@ export async function fetchAPI<T>(endpoint: string): Promise<T> {
   const url = `${API_URL}${endpoint}`;
 
   const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error(`API error: ${response.statusText}`);
-  }
-
   const data = await response.json();
 
-  if (!data.success) {
-    throw new Error(data.error || "API returned an error");
+  if (!response.ok || !data.success) {
+    const error = new Error(data.error || `API error: ${response.statusText}`) as any;
+    error.response = {
+      status: response.status,
+      data: data
+    };
+    throw error;
   }
 
   return data.data;

@@ -50,8 +50,30 @@ export default function SignalDashboard() {
       setError(null);
       const data = await fetchAPI<SignalData>(`/api/signals/${ticker.toUpperCase()}`);
       setSignal(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to fetch signal");
+    } catch (err: any) {
+      let errorMessage = "Failed to fetch signal";
+
+      // Parse API error responses
+      if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+
+        // Add helpful details for specific errors
+        if (err.response?.data?.details) {
+          errorMessage += `: ${err.response.data.details}`;
+        }
+
+        // Handle specific error scenarios
+        if (err.response?.status === 429) {
+          errorMessage += "\n\nPlease wait a few minutes before trying again.";
+        } else if (err.response?.status === 500) {
+          const provider = err.response.data?.provider || "API";
+          errorMessage = `Unable to fetch ${provider} data for ${ticker.toUpperCase()}. This stock may not have news coverage or the API is temporarily unavailable. Try another ticker.`;
+        }
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+
+      setError(errorMessage);
       setSignal(null);
     } finally {
       setLoading(false);
@@ -117,8 +139,13 @@ export default function SignalDashboard() {
       {/* Error Message */}
       {error && (
         <div style={{ backgroundColor: "#1a0000", border: "1px solid #ff0000", padding: "12px", borderRadius: "4px" }}>
-          <p style={{ color: "#ff0000", fontWeight: "bold", fontSize: "11px" }}>Error</p>
-          <p style={{ color: "#ff0000", fontSize: "10px" }}>{error}</p>
+          <p style={{ color: "#ff0000", fontWeight: "bold", fontSize: "11px" }}>⚠️ Error</p>
+          <p style={{ color: "#ff6666", fontSize: "10px", lineHeight: "1.5", whiteSpace: "pre-wrap" }}>
+            {error}
+          </p>
+          <p style={{ color: "#ff8888", fontSize: "9px", marginTop: "8px", fontStyle: "italic" }}>
+            💡 Tip: If this is a less-covered stock, try one of: AAPL, MSFT, GOOGL, TSLA, AMZN
+          </p>
         </div>
       )}
 
