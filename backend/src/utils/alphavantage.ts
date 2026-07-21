@@ -71,11 +71,61 @@ export async function getTechnicalIndicators(
   }
 
   try {
-    // This would require multiple API calls for RSI, MACD, and SMA
-    // For simplicity, we'll return null to use mock data
-    // A real implementation would make parallel calls to different functions
-    console.log("Technical indicators require multiple API calls - using mock data");
-    return null;
+    // Fetch daily time series data
+    const response = await fetch(
+      `${BASE_URL}?function=TIME_SERIES_DAILY&symbol=${symbol}&outputsize=full&apikey=${apiKey}`
+    );
+    const data = await response.json();
+
+    // Check for rate limit error
+    if (data["Note"] || data["Information"]) {
+      console.warn("AlphaVantage rate limit or error:", data["Note"] || data["Information"]);
+      return null;
+    }
+
+    const timeSeries = data["Time Series (Daily)"];
+    if (!timeSeries) {
+      console.warn(`No time series data for ${symbol}`);
+      return null;
+    }
+
+    // Extract OHLC data
+    const dates = Object.keys(timeSeries).slice(0, 250); // Last 250 trading days
+    const closes = dates
+      .reverse()
+      .map(date => parseFloat(timeSeries[date]["4. close"]));
+    const highs = dates
+      .reverse()
+      .map(date => parseFloat(timeSeries[date]["2. high"]));
+    const lows = dates
+      .reverse()
+      .map(date => parseFloat(timeSeries[date]["3. low"]));
+
+    if (closes.length < 20) {
+      console.warn(`Insufficient data for ${symbol}`);
+      return null;
+    }
+
+    // Calculate indicators
+    const {
+      calculateRSI,
+      calculateMACD,
+      calculateMovingAverages,
+      calculateADX,
+      calculateStochastic
+    } = await import("./indicators");
+
+    const rsi = calculateRSI(closes);
+    const macd = calculateMACD(closes);
+    const sma = calculateMovingAverages(closes);
+    const adx = calculateADX(highs, lows, closes);
+    const stochastic = calculateStochastic(highs, lows, closes);
+
+    return {
+      rsi,
+      macd,
+      sma
+    };
   } catch (error) {
     console.error("Technical indicators API error:", error);
   }

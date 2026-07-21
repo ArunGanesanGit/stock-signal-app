@@ -143,7 +143,7 @@ export default function SignalDashboard() {
             {loading ? "Analyzing..." : "Analyze"}
           </button>
         </div>
-        <p style={{ fontSize: "10px", color: "#ffff00", marginTop: "8px" }}>Available: AAPL, MSFT, GOOGL, TSLA, AMZN</p>
+        <p style={{ fontSize: "10px", color: "#ffff00", marginTop: "8px" }}>Search any stock ticker - Popular: AAPL, MSFT, GOOGL, TSLA, AMZN, NVDA, AMD, META</p>
       </form>
 
       {/* Error Message */}
@@ -154,7 +154,7 @@ export default function SignalDashboard() {
             {error}
           </p>
           <p style={{ color: "#ff8888", fontSize: "9px", marginTop: "8px", fontStyle: "italic" }}>
-            💡 Tip: If this is a less-covered stock, try one of: AAPL, MSFT, GOOGL, TSLA, AMZN
+            💡 Tip: Popular stocks like AAPL, MSFT, GOOGL, TSLA usually have better news coverage
           </p>
         </div>
       )}

@@ -81,7 +81,7 @@ class SignalService {
 
   // Generate a detailed signal based on technical and sentiment analysis
   async generateDetailedSignal(ticker: string): Promise<SignalBreakdown | null> {
-    const technical = technicalService.getIndicators(ticker);
+    const technical = await technicalService.getIndicators(ticker);
     const sentiment = await sentimentService.getSentiment(ticker);
     const stock = await stockService.getStockBySymbol(ticker);
     const recentNews = await sentimentService.getRecentNews(ticker, 5);

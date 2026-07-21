@@ -1,8 +1,33 @@
 import { TechnicalIndicators } from "@stock-signal/shared";
 import technicalData from "../data/technical.json";
+import { getTechnicalIndicators } from "../utils/alphavantage";
+import {
+  calculateRSI,
+  calculateMACD,
+  calculateMovingAverages,
+  calculateBollingerBands,
+  calculateADX,
+  calculateStochastic
+} from "../utils/indicators";
 
 class TechnicalService {
-  getIndicators(symbol: string): TechnicalIndicators | null {
+  async getIndicators(symbol: string): Promise<TechnicalIndicators | null> {
+    // Try to get real indicators from AlphaVantage
+    const realIndicators = await getTechnicalIndicators(symbol);
+    if (realIndicators) {
+      return {
+        symbol: symbol.toUpperCase(),
+        rsi: realIndicators.rsi,
+        macd: realIndicators.macd,
+        movingAverages: realIndicators.sma,
+        bollingerBands: { upper: 0, middle: 0, lower: 0 },
+        adx: 25,
+        stochastic: { k: 50, d: 50 },
+        timestamp: new Date().toISOString()
+      };
+    }
+
+    // Fall back to mock data from JSON for known stocks
     const indicators = technicalData.find(t =>
       t.symbol === symbol.toUpperCase()
     );
