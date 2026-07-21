@@ -2,6 +2,7 @@ import { TradingSignal } from "@stock-signal/shared";
 import signalsData from "../data/signals.json";
 import technicalService from "./technicalService";
 import sentimentService from "./sentimentService";
+import multiSourceSentimentService from "./multiSourceSentimentService";
 import stockService from "./stockService";
 import { interpretRSI, calculatePriceAction, calculateMomentumDirection } from "../utils/calculations";
 
@@ -82,15 +83,17 @@ class SignalService {
   // Generate a detailed signal based on technical and sentiment analysis
   async generateDetailedSignal(ticker: string): Promise<SignalBreakdown | null> {
     const technical = await technicalService.getIndicators(ticker);
-    const sentiment = await sentimentService.getSentiment(ticker);
+    const multiSourceSentiment = await multiSourceSentimentService.getSentimentFromMultipleSources(ticker);
     const stock = await stockService.getStockBySymbol(ticker);
-    const recentNews = await sentimentService.getRecentNews(ticker, 5);
 
     if (!technical) throw new Error("Unable to calculate technical indicators");
-    if (!sentiment) throw new Error("Unable to fetch sentiment data");
+    if (!multiSourceSentiment || multiSourceSentiment.sources.length === 0) {
+      throw new Error("Unable to fetch sentiment data from available sources");
+    }
 
     const techScore = technicalService.calculateSignalScore(technical);
-    const sentimentScore = sentimentService.calculateSentimentScore(sentiment);
+    // Convert multi-source sentiment score (0-1) to sentiment score format
+    const sentimentScore = multiSourceSentiment.overallScore;
 
     // Weighted score: 60% technical, 40% sentiment
     const combinedScore = techScore * 0.6 + sentimentScore * 0.4;
@@ -106,8 +109,8 @@ class SignalService {
     if (technical.rsi > 70) reasons.push("RSI indicates strong momentum");
     if (technical.rsi < 30) reasons.push("RSI suggests potential reversal");
     if (technical.macd.histogram > 0) reasons.push("MACD is bullish");
-    if (sentiment.sentimentScore > 0.6) reasons.push("Positive news sentiment");
-    if (sentiment.sentimentScore < 0.4) reasons.push("Negative news sentiment");
+    if (multiSourceSentiment.overallScore > 0.6) reasons.push("Positive news sentiment");
+    if (multiSourceSentiment.overallScore < 0.4) reasons.push("Negative news sentiment");
 
     // Calculate price targets based on real stock price
     let priceTargets: { entry: number; target: number; stopLoss: number } | null = null;
@@ -147,17 +150,10 @@ class SignalService {
         },
         sentiment: {
           score: sentimentScore,
-          summary: `${sentiment.overallSentiment} sentiment (${sentiment.positiveNews}/${sentiment.newsCount} positive)`,
-          newsCount: sentiment.newsCount,
-          positiveRatio: sentiment.newsCount > 0 ? sentiment.positiveNews / sentiment.newsCount : 0,
-          recentArticles: recentNews.map(article => ({
-            title: article.title,
-            source: article.source,
-            url: article.url,
-            publishedAt: article.publishedAt,
-            summary: article.summary,
-            sentiment: article.sentiment
-          }))
+          summary: `${multiSourceSentiment.overallSentiment} sentiment from ${multiSourceSentiment.sources.length} sources (score: ${(multiSourceSentiment.overallScore * 100).toFixed(0)}%)`,
+          newsCount: multiSourceSentiment.sources.reduce((sum, s) => sum + s.articles, 0),
+          positiveRatio: multiSourceSentiment.overallScore,
+          recentArticles: []
         },
         combined: {
           reasons: reasons.length > 0 ? reasons : ["No clear technical or sentiment signals"],
