@@ -3,6 +3,15 @@
 import { useState } from "react";
 import { fetchAPI } from "@/lib/api";
 
+interface NewsArticle {
+  title: string;
+  source: string;
+  url: string;
+  publishedAt: string;
+  summary: string;
+  sentiment: "positive" | "neutral" | "negative";
+}
+
 interface SignalData {
   signal: "buy" | "sell" | "hold";
   confidence: number;
@@ -19,6 +28,7 @@ interface SignalData {
       summary: string;
       newsCount: number;
       positiveRatio: number;
+      recentArticles?: NewsArticle[];
     };
     combined: {
       reasons: string[];
