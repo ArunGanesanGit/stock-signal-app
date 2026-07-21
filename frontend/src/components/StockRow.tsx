@@ -8,6 +8,7 @@ interface StockData {
   changePercent: number;
   volume: number;
   marketCap: number;
+  pe?: number;
 }
 
 interface StockRowProps {
@@ -41,7 +42,7 @@ export default function StockRow({ stock }: StockRowProps) {
         {(stock.volume / 1_000_000).toFixed(2)}M
       </td>
       <td className="px-6 py-4 text-right text-gray-600">
-        {stock.pe.toFixed(2)}x
+        {(stock.pe || 0).toFixed(2)}x
       </td>
     </tr>
   );
