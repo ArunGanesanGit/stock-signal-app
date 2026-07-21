@@ -10,7 +10,7 @@ class SentimentService {
   async getSentiment(symbol: string): Promise<SentimentData | null> {
     const upperSymbol = symbol.toUpperCase();
 
-    // Try real API first
+    // Fetch from real API only
     const realData = await getNewsAndSentiment(upperSymbol);
     if (realData) {
       return {
@@ -25,11 +25,7 @@ class SentimentService {
       };
     }
 
-    // Fallback to mock data
-    const sentiment = this.mockSentiment.find(s =>
-      s.symbol === upperSymbol
-    );
-    return sentiment as SentimentData | null;
+    return null;
   }
 
   getAllSentiments(): SentimentData[] {
@@ -39,16 +35,9 @@ class SentimentService {
   async getNews(symbol: string): Promise<NewsArticle[]> {
     const upperSymbol = symbol.toUpperCase();
 
-    // Try real API first
+    // Fetch from real API only
     const realNews = await getNews(upperSymbol);
-    if (realNews && realNews.length > 0) {
-      return realNews;
-    }
-
-    // Fallback to mock data
-    return this.mockNews.filter(n =>
-      n.symbol === upperSymbol
-    ) as NewsArticle[];
+    return realNews || [];
   }
 
   getAllNews(): NewsArticle[] {

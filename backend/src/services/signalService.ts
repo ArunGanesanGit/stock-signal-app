@@ -5,6 +5,15 @@ import sentimentService from "./sentimentService";
 import stockService from "./stockService";
 import { interpretRSI, calculatePriceAction, calculateMomentumDirection } from "../utils/calculations";
 
+export interface NewsArticleItem {
+  title: string;
+  source: string;
+  url: string;
+  publishedAt: string;
+  summary: string;
+  sentiment: "positive" | "neutral" | "negative";
+}
+
 export interface SignalBreakdown {
   signal: "buy" | "sell" | "hold";
   confidence: number;
@@ -21,6 +30,7 @@ export interface SignalBreakdown {
       summary: string;
       newsCount: number;
       positiveRatio: number;
+      recentArticles: NewsArticleItem[];
     };
     combined: {
       reasons: string[];
@@ -74,6 +84,7 @@ class SignalService {
     const technical = technicalService.getIndicators(ticker);
     const sentiment = await sentimentService.getSentiment(ticker);
     const stock = await stockService.getStockBySymbol(ticker);
+    const recentNews = await sentimentService.getRecentNews(ticker, 5);
 
     if (!technical) throw new Error("Unable to calculate technical indicators");
     if (!sentiment) throw new Error("Unable to fetch sentiment data");
@@ -138,7 +149,15 @@ class SignalService {
           score: sentimentScore,
           summary: `${sentiment.overallSentiment} sentiment (${sentiment.positiveNews}/${sentiment.newsCount} positive)`,
           newsCount: sentiment.newsCount,
-          positiveRatio: sentiment.newsCount > 0 ? sentiment.positiveNews / sentiment.newsCount : 0
+          positiveRatio: sentiment.newsCount > 0 ? sentiment.positiveNews / sentiment.newsCount : 0,
+          recentArticles: recentNews.map(article => ({
+            title: article.title,
+            source: article.source,
+            url: article.url,
+            publishedAt: article.publishedAt,
+            summary: article.summary,
+            sentiment: article.sentiment
+          }))
         },
         combined: {
           reasons: reasons.length > 0 ? reasons : ["No clear technical or sentiment signals"],
