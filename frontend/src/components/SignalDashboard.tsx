@@ -78,15 +78,30 @@ export default function SignalDashboard() {
       setLoading(true);
       setError(null);
       const upperTicker = ticker.toUpperCase();
-      const data = await fetchAPI<SignalData>(`/api/signals/${upperTicker}`);
-      setSignal(data);
 
-      // Also fetch multi-source sentiment
+      // Always fetch sentiment sources first (independent of signals)
       try {
         const sentimentData = await fetchAPI<MultiSourceSentiment>(`/api/sentiment-sources/${upperTicker}`);
         setSentimentSources(sentimentData);
       } catch (sentimentErr) {
         console.warn("Failed to fetch sentiment sources:", sentimentErr);
+        // Set empty sentiment sources so cards still display with errors
+        setSentimentSources({
+          symbol: upperTicker,
+          sources: [],
+          overallSentiment: "error" as any,
+          overallScore: 0,
+          timestamp: new Date().toISOString()
+        });
+      }
+
+      // Try to fetch signals (may fail due to API limits)
+      try {
+        const data = await fetchAPI<SignalData>(`/api/signals/${upperTicker}`);
+        setSignal(data);
+      } catch (signalErr) {
+        // Continue - sentiment cards still display
+        throw signalErr;
       }
     } catch (err: any) {
       let errorMessage = "Failed to fetch signal";
