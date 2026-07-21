@@ -71,9 +71,9 @@ export async function getTechnicalIndicators(
   }
 
   try {
-    // Fetch daily time series data
+    // Fetch daily time series data (compact = 100 latest data points, free tier compatible)
     const response = await fetch(
-      `${BASE_URL}?function=TIME_SERIES_DAILY&symbol=${symbol}&outputsize=full&apikey=${apiKey}`
+      `${BASE_URL}?function=TIME_SERIES_DAILY&symbol=${symbol}&outputsize=compact&apikey=${apiKey}`
     );
     const data = await response.json();
 
@@ -89,8 +89,8 @@ export async function getTechnicalIndicators(
       return null;
     }
 
-    // Extract OHLC data
-    const dates = Object.keys(timeSeries).slice(0, 250); // Last 250 trading days
+    // Extract OHLC data (compact mode returns ~100 trading days)
+    const dates = Object.keys(timeSeries).slice(0, 100);
     const closes = dates
       .reverse()
       .map(date => parseFloat(timeSeries[date]["4. close"]));
