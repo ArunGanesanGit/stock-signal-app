@@ -105,8 +105,8 @@ class MultiSourceSentimentService {
           score: 0.5,
           confidence: 0,
           articles: 0,
-          summary: "No data available",
-          error: "API key not configured or no data found"
+          summary: "Rate Limit",
+          error: "Daily limit exceeded (100 requests/day free tier)"
         });
       }
     } catch (error: any) {
