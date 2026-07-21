@@ -298,7 +298,12 @@ class MultiSourceSentimentService {
       // Yahoo Finance RSS feed for stock news
       const yahooRSSUrl = `https://feeds.finance.yahoo.com/rss/2.0/headline?s=${symbol}`;
 
-      const response = await fetch(yahooRSSUrl, { timeout: 5000 } as any);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+
+      const response = await fetch(yahooRSSUrl, { signal: controller.signal } as any);
+      clearTimeout(timeoutId);
+
       if (!response.ok) {
         return null;
       }
