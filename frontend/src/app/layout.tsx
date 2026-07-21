@@ -40,18 +40,18 @@ export default function RootLayout({
         <link rel="icon" type="image/png" href="/icon-192.png" />
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body style={{ backgroundColor: '#000000', color: '#ffffff', fontSize: '12px' }}>
+      <body style={{ backgroundColor: '#0F1419', color: '#E0E0E0', fontSize: '13px' }}>
         <PWARegister />
-        <header style={{ backgroundColor: '#0a0a0a', borderBottom: '1px solid #00ff00' }}>
-          <nav style={{ maxWidth: '100%', margin: '0 auto', padding: '8px 16px' }}>
+        <header style={{ backgroundColor: '#141A22', borderBottom: '2px solid #FF6666', padding: '0' }}>
+          <nav style={{ maxWidth: '100%', margin: '0 auto', padding: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <a href="/" style={{ fontSize: '16px', fontWeight: 'bold', color: '#00ffff' }}>
+              <a href="/" style={{ fontSize: '18px', fontWeight: 'bold', color: '#FFB800', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 📈 Stock Signals
               </a>
-              <ul style={{ display: 'flex', gap: '24px', listStyle: 'none', margin: 0, padding: 0 }}>
-                <li><a href="/signals" style={{ color: '#00ff00', fontSize: '11px', textDecoration: 'none' }}>Signals</a></li>
-                <li><a href="/stocks" style={{ color: '#00ff00', fontSize: '11px', textDecoration: 'none' }}>Stocks</a></li>
-                <li><a href="/portfolio" style={{ color: '#00ff00', fontSize: '11px', textDecoration: 'none' }}>Portfolio</a></li>
+              <ul style={{ display: 'flex', gap: '32px', listStyle: 'none', margin: 0, padding: 0 }}>
+                <li><a href="/signals" style={{ color: '#FFA500', fontSize: '12px', textDecoration: 'none', fontWeight: '500', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#FFB800'} onMouseLeave={(e) => e.currentTarget.style.color = '#FFA500'}>Signals</a></li>
+                <li><a href="/stocks" style={{ color: '#FFA500', fontSize: '12px', textDecoration: 'none', fontWeight: '500', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#FFB800'} onMouseLeave={(e) => e.currentTarget.style.color = '#FFA500'}>Stocks</a></li>
+                <li><a href="/portfolio" style={{ color: '#FFA500', fontSize: '12px', textDecoration: 'none', fontWeight: '500', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#FFB800'} onMouseLeave={(e) => e.currentTarget.style.color = '#FFA500'}>Portfolio</a></li>
               </ul>
             </div>
           </nav>
@@ -61,8 +61,8 @@ export default function RootLayout({
           {children}
         </main>
 
-        <footer style={{ backgroundColor: '#0a0a0a', borderTop: '1px solid #ff00ff', marginTop: '32px', padding: '16px', textAlign: 'center' }}>
-          <div style={{ color: '#ffff00', fontSize: '10px' }}>
+        <footer style={{ backgroundColor: '#141A22', borderTop: '1px solid #FF6666', marginTop: '32px', padding: '20px', textAlign: 'center' }}>
+          <div style={{ color: '#888888', fontSize: '11px' }}>
             <p>&copy; 2026 Stock Signal. Real-time data powered by AlphaVantage & NewsAPI</p>
           </div>
         </footer>

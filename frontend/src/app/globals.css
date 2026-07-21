@@ -11,7 +11,7 @@
 html {
   scroll-behavior: smooth;
   color-scheme: dark;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 body {
@@ -20,10 +20,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #000000;
-  color: #ffffff;
-  font-size: 12px;
-  line-height: 1.4;
+  background-color: #0F1419;
+  color: #E0E0E0;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 a {
@@ -31,210 +31,241 @@ a {
   text-decoration: none;
 }
 
-/* Dark theme inputs and cards */
+/* Professional dark theme - Red/Orange accent */
 input, textarea, select {
-  background-color: #1a1a1a;
-  color: #00ff00;
-  border: 1px solid #0088ff;
-  font-size: 11px;
+  background-color: #1A1F28;
+  color: #FFB800;
+  border: 1px solid #FF6666;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 12px;
 }
 
 input::placeholder {
-  color: #0088ff;
+  color: #888888;
 }
 
-/* Signal badge colors - Bright and vibrant */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #FFA500;
+  box-shadow: 0 0 0 2px rgba(255, 165, 0, 0.1);
+}
+
+/* Signal badge colors - Professional */
 .signal-buy {
-  background-color: #001a00;
-  color: #00ff00;
+  background-color: rgba(74, 222, 128, 0.15);
+  color: #4ADE80;
   font-weight: bold;
-  font-size: 12px;
 }
 
 .signal-sell {
-  background-color: #1a0000;
-  color: #ff0000;
+  background-color: rgba(255, 102, 102, 0.15);
+  color: #FF6666;
   font-weight: bold;
-  font-size: 12px;
 }
 
 .signal-hold {
-  background-color: #1a1a00;
-  color: #ffff00;
-  font-weight: bold;
-  font-size: 12px;
-}
-
-.sentiment-positive {
-  color: #00ff00;
+  background-color: rgba(255, 184, 0, 0.15);
+  color: #FFB800;
   font-weight: bold;
 }
 
-.sentiment-negative {
-  color: #ff0000;
-  font-weight: bold;
+/* Headings - Orange/Gold */
+h1, h2, h3, h4, h5, h6 {
+  color: #FFB800;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
-.sentiment-neutral {
-  color: #ffff00;
-  font-weight: bold;
-}
-
-/* Colorful heading styles */
 h1 {
-  color: #00ffff;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 28px;
 }
 
 h2 {
-  color: #00ff00;
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 20px;
 }
 
 h3 {
-  color: #0088ff;
-  font-size: 13px;
-  font-weight: bold;
-}
-
-h4, h5, h6 {
-  color: #ff00ff;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-/* Colorful labels */
-label {
-  color: #00ffff;
-  font-size: 11px;
-  font-weight: bold;
-}
-
-/* Button styling */
-button {
-  background-color: #0088ff;
-  color: #000000;
-  font-size: 11px;
-  font-weight: bold;
-  border: 1px solid #00ff00;
-  padding: 6px 12px;
-}
-
-button:hover {
-  background-color: #00ff00;
-  color: #000000;
-  border: 1px solid #ff0000;
-}
-
-/* Loading state */
-.skeleton {
-  background-color: #1a1a1a;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  border-radius: 4px;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-/* Cards */
-.bg-white, .bg-gray-50 {
-  background-color: #0a0a0a;
-  border: 1px solid #333333;
-}
-
-.border-gray-300 {
-  border-color: #333333;
-}
-
-.text-gray-600 {
-  color: #ffff00;
-  font-size: 11px;
-}
-
-.text-gray-900 {
-  color: #00ff00;
-}
-
-/* Table styling */
-table {
-  background-color: #0a0a0a;
-  border: 1px solid #0088ff;
-  font-size: 11px;
-}
-
-thead {
-  background-color: #1a1a1a;
-  color: #00ff00;
-  font-weight: bold;
-}
-
-tbody tr {
-  border-bottom: 1px solid #333333;
-}
-
-tbody tr:hover {
-  background-color: #1a1a1a;
-}
-
-tbody td {
-  color: #00ffff;
-  font-size: 11px;
-  padding: 6px 8px;
-}
-
-/* Error messages */
-.bg-red-50 {
-  background-color: #1a0000;
-  border: 1px solid #ff0000;
-}
-
-.text-red-800 {
-  color: #ff0000;
-  font-weight: bold;
-}
-
-.border-red-200 {
-  border-color: #ff0000;
-}
-
-/* Success messages */
-.bg-green-50 {
-  background-color: #001a00;
-  border: 1px solid #00ff00;
-}
-
-.text-green-600 {
-  color: #00ff00;
-  font-weight: bold;
-}
-
-.border-green-200 {
-  border-color: #00ff00;
+  font-size: 16px;
 }
 
 /* Links */
 a {
-  color: #0088ff;
-  text-decoration: none;
-  font-size: 11px;
+  color: #FFA500;
+  transition: color 0.2s ease;
 }
 
 a:hover {
-  color: #00ffff;
-  text-decoration: underline;
+  color: #FFB800;
 }
 
-/* Text styling */
-p {
-  color: #cccccc;
-  font-size: 11px;
-  line-height: 1.4;
+/* Cards and containers */
+.card, .container {
+  background-color: #1A1F28;
+  border: 1px solid #2A3040;
+  border-radius: 8px;
 }
 
-span {
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #141A22;
+  border-bottom: 2px solid #FF6666;
+}
+
+th {
+  color: #FFB800;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid #2A3040;
+  color: #E0E0E0;
+}
+
+tr:hover {
+  background-color: #1F2633;
+}
+
+/* Positive values - Green */
+.positive, .gain {
+  color: #4ADE80;
+}
+
+/* Negative values - Red */
+.negative, .loss {
+  color: #FF6666;
+}
+
+/* Neutral/accent - Orange */
+.neutral, .accent {
+  color: #FFB800;
+}
+
+/* Buttons */
+button {
+  background-color: #FF6666;
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+}
+
+button:hover {
+  background-color: #FF7777;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 102, 102, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:disabled {
+  background-color: #555555;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Error messages */
+.error, .alert-error {
+  background-color: rgba(255, 102, 102, 0.1);
+  border: 1px solid #FF6666;
+  color: #FF8888;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* Success messages */
+.success, .alert-success {
+  background-color: rgba(74, 222, 128, 0.1);
+  border: 1px solid #4ADE80;
+  color: #7EE8A8;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* Warning messages */
+.warning, .alert-warning {
+  background-color: rgba(255, 184, 0, 0.1);
+  border: 1px solid #FFB800;
+  color: #FFD94D;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* Badges and tags */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
   font-size: 11px;
+  font-weight: 600;
+}
+
+.badge-red {
+  background-color: rgba(255, 102, 102, 0.2);
+  color: #FF8888;
+}
+
+.badge-gold {
+  background-color: rgba(255, 184, 0, 0.2);
+  color: #FFD94D;
+}
+
+.badge-green {
+  background-color: rgba(74, 222, 128, 0.2);
+  color: #7EE8A8;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #141A22;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FF6666;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FFB800;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  html {
+    font-size: 12px;
+  }
+
+  body {
+    font-size: 12px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
 }
