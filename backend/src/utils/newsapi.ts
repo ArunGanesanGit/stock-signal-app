@@ -108,7 +108,19 @@ export async function getNewsAndSentiment(
     const data = await response.json();
 
     if (!data.articles || data.articles.length === 0) {
-      throw new Error(`No news articles found for ${symbol}`);
+      // Return neutral sentiment if no articles found
+      console.log(`No news articles found for ${symbol}, returning neutral sentiment`);
+      return {
+        articles: [],
+        sentiment: {
+          overallSentiment: "neutral",
+          sentimentScore: 0.5,
+          newsCount: 0,
+          positiveNews: 0,
+          negativeNews: 0,
+          neutralNews: 0
+        }
+      };
     }
 
     const articles: NewsArticle[] = data.articles.map((article: any, index: number) => {
