@@ -89,9 +89,10 @@ export async function getNewsAndSentiment(
 ): Promise<{ articles: NewsArticle[]; sentiment: SentimentResult } | null> {
   const apiKey = getApiKey();
   if (!apiKey) {
-    console.log("NewsAPI key not set, using mock data");
+    console.warn(`NewsAPI key not set for ${symbol}, returning null`);
     return null;
   }
+  console.log(`Fetching news for ${symbol} with NewsAPI`);
 
   try {
     const response = await fetch(
