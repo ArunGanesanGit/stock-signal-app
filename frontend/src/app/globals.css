@@ -20,7 +20,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0F1419;
+  background-color: #0A0E14;
   color: #E0E0E0;
   font-size: 13px;
   line-height: 1.5;
@@ -99,10 +99,10 @@ a:hover {
   color: #FFB800;
 }
 
-/* Cards and containers */
+/* Cards and containers - with depth layers */
 .card, .container {
-  background-color: #1A1F28;
-  border: 1px solid #2A3040;
+  background-color: #151B24;
+  border: 1px solid #1F2633;
   border-radius: 8px;
 }
 

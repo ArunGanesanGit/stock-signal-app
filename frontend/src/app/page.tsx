@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="space-y-12">
       {/* Hero Section - Professional Dark */}
-      <section style={{ backgroundColor: '#1A1F28', padding: '40px 24px', borderRadius: '8px', borderLeft: '4px solid #FF6666' }}>
+      <section style={{ backgroundColor: '#151B24', padding: '40px 24px', borderRadius: '8px', borderLeft: '4px solid #FF6666' }}>
         <h1 style={{ fontSize: '40px', fontWeight: 'bold', marginBottom: '16px', color: '#FFB800' }}>
           Stock Signal Analyzer
         </h1>
@@ -87,23 +87,23 @@ export default function Home() {
       <section>
         <h2 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '32px', color: '#FFB800' }}>Live Stats</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
-          <div style={{ backgroundColor: '#1A1F28', padding: '20px', borderRadius: '8px', border: '1px solid #2A3040' }}>
+          <div style={{ backgroundColor: '#151B24', padding: '20px', borderRadius: '8px', border: '1px solid #1F2633' }}>
             <p style={{ color: '#888888', fontSize: '12px', marginBottom: '8px' }}>Tracked Stocks</p>
             <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FFB800' }}>5</p>
           </div>
-          <div style={{ backgroundColor: '#1A1F28', padding: '20px', borderRadius: '8px', border: '1px solid #2A3040' }}>
+          <div style={{ backgroundColor: '#151B24', padding: '20px', borderRadius: '8px', border: '1px solid #1F2633' }}>
             <p style={{ color: '#888888', fontSize: '12px', marginBottom: '8px' }}>Buy Signals</p>
             <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#4ADE80' }}>2</p>
           </div>
-          <div style={{ backgroundColor: '#1A1F28', padding: '20px', borderRadius: '8px', border: '1px solid #2A3040' }}>
+          <div style={{ backgroundColor: '#151B24', padding: '20px', borderRadius: '8px', border: '1px solid #1F2633' }}>
             <p style={{ color: '#888888', fontSize: '12px', marginBottom: '8px' }}>Sell Signals</p>
             <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FF6666' }}>1</p>
           </div>
-          <div style={{ backgroundColor: '#1A1F28', padding: '20px', borderRadius: '8px', border: '1px solid #2A3040' }}>
+          <div style={{ backgroundColor: '#151B24', padding: '20px', borderRadius: '8px', border: '1px solid #1F2633' }}>
             <p style={{ color: '#888888', fontSize: '12px', marginBottom: '8px' }}>Hold Signals</p>
             <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FFB800' }}>2</p>
           </div>
-          <div style={{ backgroundColor: '#1A1F28', padding: '20px', borderRadius: '8px', border: '1px solid #2A3040' }}>
+          <div style={{ backgroundColor: '#151B24', padding: '20px', borderRadius: '8px', border: '1px solid #1F2633' }}>
             <p style={{ color: '#888888', fontSize: '12px', marginBottom: '8px' }}>Avg Confidence</p>
             <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FFA500' }}>72%</p>
           </div>
