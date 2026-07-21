@@ -428,27 +428,42 @@ export default function SignalDashboard() {
               <div style={{ padding: "12px", backgroundColor: "#1a1a1a", borderRadius: "6px", border: `1px solid ${sentimentSources.overallSentiment === "positive" ? "#00ff00" : sentimentSources.overallSentiment === "negative" ? "#ff0000" : "#ffff00"}` }}>
                 <p style={{ fontSize: "10px", color: "#888888", margin: "0 0 8px 0", fontWeight: "bold" }}>📊 OVERALL SENTIMENT (Weighted Average)</p>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <p
-                    style={{
-                      fontSize: "28px",
-                      fontWeight: "bold",
-                      color:
-                        sentimentSources.overallSentiment === "positive"
-                          ? "#00ff00"
-                          : sentimentSources.overallSentiment === "negative"
-                            ? "#ff0000"
-                            : "#ffff00",
-                      margin: 0,
-                      textTransform: "uppercase"
-                    }}
-                  >
-                    {sentimentSources.overallSentiment === "positive"
-                      ? "🟢"
-                      : sentimentSources.overallSentiment === "negative"
-                        ? "🔴"
-                        : "🟡"}{" "}
-                  {sentimentSources.overallSentiment.toUpperCase()} ({(sentimentSources.overallScore * 100).toFixed(0)}%)
-                </p>
+                    <p
+                      style={{
+                        fontSize: "28px",
+                        fontWeight: "bold",
+                        color:
+                          sentimentSources.overallSentiment === "positive"
+                            ? "#00ff00"
+                            : sentimentSources.overallSentiment === "negative"
+                              ? "#ff0000"
+                              : "#ffff00",
+                        margin: 0
+                      }}
+                    >
+                      {sentimentSources.overallSentiment === "positive"
+                        ? "🟢"
+                        : sentimentSources.overallSentiment === "negative"
+                          ? "🔴"
+                          : "🟡"}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        color:
+                          sentimentSources.overallSentiment === "positive"
+                            ? "#00ff00"
+                            : sentimentSources.overallSentiment === "negative"
+                              ? "#ff0000"
+                              : "#ffff00",
+                        margin: 0,
+                        textTransform: "uppercase"
+                      }}
+                    >
+                      {sentimentSources.overallSentiment} ({(sentimentSources.overallScore * 100).toFixed(0)}%)
+                    </p>
+                </div>
               </div>
             </div>
           )}
