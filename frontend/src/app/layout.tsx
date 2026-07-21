@@ -49,9 +49,9 @@ export default function RootLayout({
                 📈 Stock Signals
               </a>
               <ul style={{ display: 'flex', gap: '32px', listStyle: 'none', margin: 0, padding: 0 }}>
-                <li><a href="/signals" style={{ color: '#FFA500', fontSize: '12px', textDecoration: 'none', fontWeight: '500', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#FFB800'} onMouseLeave={(e) => e.currentTarget.style.color = '#FFA500'}>Signals</a></li>
-                <li><a href="/stocks" style={{ color: '#FFA500', fontSize: '12px', textDecoration: 'none', fontWeight: '500', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#FFB800'} onMouseLeave={(e) => e.currentTarget.style.color = '#FFA500'}>Stocks</a></li>
-                <li><a href="/portfolio" style={{ color: '#FFA500', fontSize: '12px', textDecoration: 'none', fontWeight: '500', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#FFB800'} onMouseLeave={(e) => e.currentTarget.style.color = '#FFA500'}>Portfolio</a></li>
+                <li><a href="/signals" style={{ color: '#FFA500', fontSize: '12px', textDecoration: 'none', fontWeight: '500' }}>Signals</a></li>
+                <li><a href="/stocks" style={{ color: '#FFA500', fontSize: '12px', textDecoration: 'none', fontWeight: '500' }}>Stocks</a></li>
+                <li><a href="/portfolio" style={{ color: '#FFA500', fontSize: '12px', textDecoration: 'none', fontWeight: '500' }}>Portfolio</a></li>
               </ul>
             </div>
           </nav>
