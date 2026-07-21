@@ -32,6 +32,8 @@ export default function StocksPage() {
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<"trending" | "all">("trending");
   const [sortBy, setSortBy] = useState<"symbol" | "price" | "change" | "news" | "sentiment">("news");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<StockData[]>([]);
 
   useEffect(() => {
     loadData();
@@ -89,6 +91,23 @@ export default function StocksPage() {
     return "❄️ Trending Down" as const;
   };
 
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+      const stock = await fetchAPI(`/api/stocks/${searchQuery.toUpperCase()}`);
+      setSearchResults([stock as StockData]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Stock not found");
+      setSearchResults([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const sortedStocks = [...stocks].sort((a, b) => {
     switch (sortBy) {
       case "price":
@@ -121,6 +140,40 @@ export default function StocksPage() {
         <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "8px", color: "#00ff00" }}>📊 Stocks & Trends</h1>
         <p style={{ color: "#00ffff", fontSize: "12px" }}>Monitor stock prices, sentiment, and trending topics</p>
       </div>
+
+      {/* Search Any Stock */}
+      <form onSubmit={handleSearch} style={{ display: "flex", gap: "8px" }}>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search any stock ticker (e.g., NVDA, AMD, GOOGL)"
+          style={{
+            flex: 1,
+            padding: "10px 12px",
+            borderRadius: "4px",
+            backgroundColor: "#1a1a1a",
+            border: "1px solid #00ffff",
+            color: "#00ff00",
+            fontSize: "12px",
+          }}
+        />
+        <button
+          type="submit"
+          style={{
+            padding: "10px 16px",
+            borderRadius: "4px",
+            backgroundColor: "#00ffff",
+            color: "#000000",
+            fontWeight: "bold",
+            fontSize: "12px",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          Search
+        </button>
+      </form>
 
       {/* View Toggle */}
       <div style={{ display: "flex", gap: "12px" }}>
@@ -203,10 +256,44 @@ export default function StocksPage() {
         </div>
       )}
 
+      {/* Search Results */}
+      {searchResults.length > 0 && (
+        <div style={{ backgroundColor: "#0a0a0a", borderRadius: "4px", overflow: "hidden", border: "1px solid #00ffff" }}>
+          <div style={{ padding: "12px", backgroundColor: "#1a1a1a", borderBottom: "1px solid #00ffff" }}>
+            <h2 style={{ color: "#00ffff", fontSize: "14px", fontWeight: "bold", margin: 0 }}>Search Result: {searchResults[0].symbol}</h2>
+          </div>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "11px" }}>
+            <thead style={{ backgroundColor: "#1a1a1a", borderBottom: "1px solid #00ffff" }}>
+              <tr>
+                <th style={{ padding: "12px", textAlign: "left", color: "#00ffff", fontWeight: "bold" }}>Symbol</th>
+                <th style={{ padding: "12px", textAlign: "right", color: "#00ffff", fontWeight: "bold" }}>Price</th>
+                <th style={{ padding: "12px", textAlign: "right", color: "#00ffff", fontWeight: "bold" }}>Change</th>
+                <th style={{ padding: "12px", textAlign: "right", color: "#00ffff", fontWeight: "bold" }}>Volume</th>
+                <th style={{ padding: "12px", textAlign: "right", color: "#00ffff", fontWeight: "bold" }}>P/E</th>
+              </tr>
+            </thead>
+            <tbody>
+              {searchResults.map((stock) => (
+                <tr key={stock.symbol} style={{ borderBottom: "1px solid #333" }}>
+                  <td style={{ padding: "12px", color: "#00ffff", fontWeight: "bold" }}>{stock.symbol}</td>
+                  <td style={{ padding: "12px", textAlign: "right", color: "#00ff00" }}>${stock.price.toFixed(2)}</td>
+                  <td style={{ padding: "12px", textAlign: "right", color: stock.change >= 0 ? "#00ff00" : "#ff0000" }}>
+                    {stock.change >= 0 ? "+" : ""}{stock.change.toFixed(2)}%
+                  </td>
+                  <td style={{ padding: "12px", textAlign: "right", color: "#ffff00" }}>{(stock.volume / 1000000).toFixed(1)}M</td>
+                  <td style={{ padding: "12px", textAlign: "right", color: "#00ffff" }}>{(stock.pe || 0).toFixed(1)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
       {/* Error State */}
-      {error && (
+      {error && searchResults.length === 0 && (
         <div style={{ backgroundColor: "#1a0000", border: "1px solid #ff0000", padding: "12px", borderRadius: "4px" }}>
-          <p style={{ color: "#ff0000", fontWeight: "bold", fontSize: "11px" }}>Error: {error}</p>
+          <p style={{ color: "#ff0000", fontWeight: "bold", fontSize: "11px" }}>⚠️ Error: {error}</p>
+          <p style={{ color: "#ff6666", fontSize: "10px", marginTop: "6px" }}>Try searching for: AAPL, MSFT, GOOGL, TSLA, AMZN, NVDA, AMD, META, etc.</p>
         </div>
       )}
 
