@@ -89,8 +89,7 @@ export async function getNewsAndSentiment(
 ): Promise<{ articles: NewsArticle[]; sentiment: SentimentResult } | null> {
   const apiKey = getApiKey();
   if (!apiKey) {
-    console.warn(`NewsAPI key not set for ${symbol}, returning null`);
-    return null;
+    throw new Error("NEWSAPI_KEY_NOT_SET");
   }
   console.log(`Fetching news for ${symbol} with NewsAPI`);
 
@@ -100,14 +99,16 @@ export async function getNewsAndSentiment(
     );
 
     if (!response.ok) {
-      console.error(`NewsAPI returned status ${response.status}`);
-      return null;
+      if (response.status === 429) {
+        throw new Error("NEWSAPI_RATE_LIMIT_EXCEEDED");
+      }
+      throw new Error(`NewsAPI returned status ${response.status}`);
     }
 
     const data = await response.json();
 
     if (!data.articles || data.articles.length === 0) {
-      return null;
+      throw new Error(`No news articles found for ${symbol}`);
     }
 
     const articles: NewsArticle[] = data.articles.map((article: any, index: number) => {
@@ -148,11 +149,9 @@ export async function getNewsAndSentiment(
         neutralNews: neutralCount
       }
     };
-  } catch (error) {
-    console.error("NewsAPI error:", error);
+  } catch (error: any) {
+    throw error;
   }
-
-  return null;
 }
 
 export async function getNews(symbol: string, limit: number = 10): Promise<NewsArticle[] | null> {

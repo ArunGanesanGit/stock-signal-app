@@ -38,12 +38,28 @@ router.get("/:symbol", async (req: Request, res: Response<ApiResponse<any>>) => 
     if (error.message === "RATE_LIMIT_EXCEEDED") {
       return res.status(429).json({
         success: false,
-        error: "API Rate Limit Exceeded",
-        details: "You've reached the maximum API calls. Please try again in a few minutes.",
+        error: "AlphaVantage API Rate Limit Exceeded",
+        details: "You've reached the maximum API calls for AlphaVantage (5 calls/min, 100/day). Please try again in a few minutes.",
+        provider: "AlphaVantage",
         timestamp: new Date().toISOString()
       });
     }
-    throw error;
+
+    if (error.message === "API_KEY_NOT_SET") {
+      return res.status(500).json({
+        success: false,
+        error: "AlphaVantage API Key Not Configured",
+        details: "Stock price API key is not set on the server.",
+        provider: "AlphaVantage",
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      error: error.message || "Failed to fetch stock data",
+      timestamp: new Date().toISOString()
+    });
   }
 });
 

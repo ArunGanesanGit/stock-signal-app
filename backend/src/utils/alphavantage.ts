@@ -25,8 +25,7 @@ interface TechnicalData {
 export async function getStockQuote(symbol: string): Promise<QuoteData | null> {
   const apiKey = getApiKey();
   if (!apiKey) {
-    console.log("AlphaVantage API key not set, using mock data");
-    return null;
+    throw new Error("API_KEY_NOT_SET");
   }
 
   try {
@@ -54,14 +53,13 @@ export async function getStockQuote(symbol: string): Promise<QuoteData | null> {
         low52Week: parseFloat(quote["52. 52 week low"] || 0)
       };
     }
+    throw new Error(`No data received for symbol ${symbol}`);
   } catch (error: any) {
     if (error.message === "RATE_LIMIT_EXCEEDED") {
       throw error;
     }
-    console.error("AlphaVantage API error:", error);
+    throw error;
   }
-
-  return null;
 }
 
 export async function getTechnicalIndicators(

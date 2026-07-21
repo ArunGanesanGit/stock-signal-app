@@ -75,7 +75,8 @@ class SignalService {
     const sentiment = await sentimentService.getSentiment(ticker);
     const stock = await stockService.getStockBySymbol(ticker);
 
-    if (!technical || !sentiment) return null;
+    if (!technical) throw new Error("Unable to calculate technical indicators");
+    if (!sentiment) throw new Error("Unable to fetch sentiment data");
 
     const techScore = technicalService.calculateSignalScore(technical);
     const sentimentScore = sentimentService.calculateSentimentScore(sentiment);
