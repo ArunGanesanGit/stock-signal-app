@@ -6,6 +6,7 @@ import stockRoutes from "./routes/stock";
 import technicalRoutes from "./routes/technical";
 import sentimentRoutes from "./routes/sentiment";
 import signalRoutes from "./routes/signals";
+import statsRoutes from "./routes/stats";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use("/api/stocks", stockRoutes);
 app.use("/api/technical", technicalRoutes);
 app.use("/api/sentiment", sentimentRoutes);
 app.use("/api/signals", signalRoutes);
+app.use("/api/stats", statsRoutes);
 
 // 404 handler
 app.use((req, res) => {

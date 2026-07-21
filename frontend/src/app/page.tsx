@@ -1,9 +1,42 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import SignalDashboard from "@/components/SignalDashboard";
+import { fetchAPI } from "@/lib/api";
+
+interface LiveStats {
+  trackedStocks: number;
+  buySignals: number;
+  sellSignals: number;
+  holdSignals: number;
+  avgConfidence: number;
+}
 
 export default function Home() {
+  const [stats, setStats] = useState<LiveStats>({
+    trackedStocks: 0,
+    buySignals: 0,
+    sellSignals: 0,
+    holdSignals: 0,
+    avgConfidence: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const data = await fetchAPI<LiveStats>("/api/stats");
+        setStats(data);
+      } catch (error) {
+        console.error("Failed to load stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadStats();
+  }, []);
+
   return (
     <div className="space-y-12">
       {/* Hero Section - Professional Dark */}
@@ -69,23 +102,23 @@ export default function Home() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
           <div style={{ backgroundColor: '#151B24', padding: '20px', borderRadius: '8px', border: '1px solid #1F2633' }}>
             <p style={{ color: '#888888', fontSize: '12px', marginBottom: '8px' }}>Tracked Stocks</p>
-            <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FFB800' }}>5</p>
+            <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FFB800' }}>{loading ? '...' : stats.trackedStocks}</p>
           </div>
           <div style={{ backgroundColor: '#151B24', padding: '20px', borderRadius: '8px', border: '1px solid #1F2633' }}>
             <p style={{ color: '#888888', fontSize: '12px', marginBottom: '8px' }}>Buy Signals</p>
-            <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#4ADE80' }}>2</p>
+            <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#4ADE80' }}>{loading ? '...' : stats.buySignals}</p>
           </div>
           <div style={{ backgroundColor: '#151B24', padding: '20px', borderRadius: '8px', border: '1px solid #1F2633' }}>
             <p style={{ color: '#888888', fontSize: '12px', marginBottom: '8px' }}>Sell Signals</p>
-            <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FF6666' }}>1</p>
+            <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FF6666' }}>{loading ? '...' : stats.sellSignals}</p>
           </div>
           <div style={{ backgroundColor: '#151B24', padding: '20px', borderRadius: '8px', border: '1px solid #1F2633' }}>
             <p style={{ color: '#888888', fontSize: '12px', marginBottom: '8px' }}>Hold Signals</p>
-            <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FFB800' }}>2</p>
+            <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FFB800' }}>{loading ? '...' : stats.holdSignals}</p>
           </div>
           <div style={{ backgroundColor: '#151B24', padding: '20px', borderRadius: '8px', border: '1px solid #1F2633' }}>
             <p style={{ color: '#888888', fontSize: '12px', marginBottom: '8px' }}>Avg Confidence</p>
-            <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FFA500' }}>72%</p>
+            <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#FFA500' }}>{loading ? '...' : stats.avgConfidence.toFixed(1)}%</p>
           </div>
         </div>
       </section>
