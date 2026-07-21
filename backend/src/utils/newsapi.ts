@@ -3,7 +3,7 @@
 const BASE_URL = "https://newsapi.org/v2";
 
 function getApiKey() {
-  return process.env.NEWSAPI_KEY;
+  return process.env.NEWS_API_KEY;
 }
 
 interface NewsArticle {
@@ -89,7 +89,7 @@ export async function getNewsAndSentiment(
 ): Promise<{ articles: NewsArticle[]; sentiment: SentimentResult } | null> {
   const apiKey = getApiKey();
   if (!apiKey) {
-    throw new Error("NEWSAPI_KEY_NOT_SET");
+    throw new Error("NEWS_API_KEY_NOT_SET");
   }
   console.log(`Fetching news for ${symbol} with NewsAPI`);
 

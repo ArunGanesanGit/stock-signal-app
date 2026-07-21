@@ -101,7 +101,7 @@ router.get("/:ticker", async (req: Request, res: Response<ApiResponse<any>>) => 
       });
     }
 
-    if (error.message === "NEWSAPI_KEY_NOT_SET") {
+    if (error.message === "NEWS_API_KEY_NOT_SET") {
       return res.status(500).json({
         success: false,
         error: "NewsAPI Key Not Configured",
