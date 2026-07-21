@@ -248,9 +248,9 @@ export default function SignalDashboard() {
 
       {/* Empty State */}
       {!signal && !error && !loading && (
-        <div style={{ backgroundColor: "#0a0a0a", border: "1px solid #0088ff", padding: "32px", borderRadius: "4px", textAlign: "center" }}>
-          <p style={{ color: "#00ffff", fontSize: "13px", fontWeight: "bold", marginBottom: "8px" }}>Ready to Analyze</p>
-          <p style={{ color: "#00ff00", fontSize: "11px" }}>Enter a stock ticker to get a detailed trading signal with technical and sentiment breakdown.</p>
+        <div style={{ backgroundColor: "#1A1F28", border: "1px solid #FF6666", padding: "32px", borderRadius: "4px", textAlign: "center" }}>
+          <p style={{ color: "#FF6666", fontSize: "13px", fontWeight: "bold", marginBottom: "8px" }}>Ready to Analyze</p>
+          <p style={{ color: "#E0E0E0", fontSize: "11px" }}>Enter a stock ticker to get a detailed trading signal with technical and sentiment breakdown.</p>
         </div>
       )}
     </div>
