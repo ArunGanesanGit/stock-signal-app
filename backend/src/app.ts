@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import stockRoutes from "./routes/stock";
 import technicalRoutes from "./routes/technical";
 import sentimentRoutes from "./routes/sentiment";
+import sentimentSourcesRoutes from "./routes/sentiment-sources";
 import signalRoutes from "./routes/signals";
 import statsRoutes from "./routes/stats";
 
@@ -28,6 +29,7 @@ app.get("/health", (req, res) => {
 app.use("/api/stocks", stockRoutes);
 app.use("/api/technical", technicalRoutes);
 app.use("/api/sentiment", sentimentRoutes);
+app.use("/api/sentiment-sources", sentimentSourcesRoutes);
 app.use("/api/signals", signalRoutes);
 app.use("/api/stats", statsRoutes);
 

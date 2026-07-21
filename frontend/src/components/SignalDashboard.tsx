@@ -12,6 +12,23 @@ interface NewsArticle {
   sentiment: "positive" | "neutral" | "negative";
 }
 
+interface SourceSentiment {
+  source: string;
+  sentiment: "positive" | "neutral" | "negative";
+  score: number;
+  confidence: number;
+  articles: number;
+  summary: string;
+}
+
+interface MultiSourceSentiment {
+  symbol: string;
+  sources: SourceSentiment[];
+  overallSentiment: "positive" | "neutral" | "negative";
+  overallScore: number;
+  timestamp: string;
+}
+
 interface SignalData {
   signal: "buy" | "sell" | "hold";
   confidence: number;
@@ -44,6 +61,7 @@ interface SignalData {
 export default function SignalDashboard() {
   const [ticker, setTicker] = useState("");
   const [signal, setSignal] = useState<SignalData | null>(null);
+  const [sentimentSources, setSentimentSources] = useState<MultiSourceSentiment | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -58,8 +76,17 @@ export default function SignalDashboard() {
     try {
       setLoading(true);
       setError(null);
-      const data = await fetchAPI<SignalData>(`/api/signals/${ticker.toUpperCase()}`);
+      const upperTicker = ticker.toUpperCase();
+      const data = await fetchAPI<SignalData>(`/api/signals/${upperTicker}`);
       setSignal(data);
+
+      // Also fetch multi-source sentiment
+      try {
+        const sentimentData = await fetchAPI<MultiSourceSentiment>(`/api/sentiment-sources/${upperTicker}`);
+        setSentimentSources(sentimentData);
+      } catch (sentimentErr) {
+        console.warn("Failed to fetch sentiment sources:", sentimentErr);
+      }
     } catch (err: any) {
       let errorMessage = "Failed to fetch signal";
 
@@ -286,6 +313,92 @@ export default function SignalDashboard() {
                     </p>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Multi-Source Sentiment Analysis */}
+          {sentimentSources && sentimentSources.sources.length > 0 && (
+            <div style={{ marginTop: "16px", backgroundColor: "#0a0a0a", borderRadius: "4px", padding: "12px", border: "1px solid #FFA500" }}>
+              <h3 style={{ fontWeight: "bold", color: "#FFA500", marginBottom: "12px", fontSize: "12px" }}>🔍 Sentiment from Multiple Sources</h3>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "10px" }}>
+                {sentimentSources.sources.map((source, idx) => {
+                  const sentimentColor =
+                    source.sentiment === "positive"
+                      ? "#00ff00"
+                      : source.sentiment === "negative"
+                        ? "#ff0000"
+                        : "#ffff00";
+                  const bgColor =
+                    source.sentiment === "positive"
+                      ? "#001a00"
+                      : source.sentiment === "negative"
+                        ? "#1a0000"
+                        : "#1a1a00";
+
+                  return (
+                    <div
+                      key={idx}
+                      style={{
+                        backgroundColor: bgColor,
+                        borderRadius: "4px",
+                        padding: "10px",
+                        border: `1px solid ${sentimentColor}`,
+                        textAlign: "center"
+                      }}
+                    >
+                      <p style={{ fontSize: "9px", color: "#888888", marginBottom: "4px" }}>
+                        {source.source}
+                      </p>
+                      <p
+                        style={{
+                          fontSize: "16px",
+                          fontWeight: "bold",
+                          color: sentimentColor,
+                          textTransform: "uppercase",
+                          marginBottom: "6px"
+                        }}
+                      >
+                        {source.sentiment === "positive"
+                          ? "🟢"
+                          : source.sentiment === "negative"
+                            ? "🔴"
+                            : "🟡"}{" "}
+                        {source.sentiment}
+                      </p>
+                      <p style={{ fontSize: "9px", color: "#cccccc", marginBottom: "4px" }}>
+                        {source.summary}
+                      </p>
+                      {source.articles > 0 && (
+                        <p style={{ fontSize: "8px", color: "#888888" }}>
+                          {source.articles} articles analyzed
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <div style={{ marginTop: "12px", padding: "8px", backgroundColor: "#1a1a1a", borderRadius: "4px", border: `1px solid ${sentimentSources.overallSentiment === "positive" ? "#00ff00" : sentimentSources.overallSentiment === "negative" ? "#ff0000" : "#ffff00"}` }}>
+                <p style={{ fontSize: "9px", color: "#888888", marginBottom: "4px" }}>Overall Sentiment (Weighted Average)</p>
+                <p
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    color:
+                      sentimentSources.overallSentiment === "positive"
+                        ? "#00ff00"
+                        : sentimentSources.overallSentiment === "negative"
+                          ? "#ff0000"
+                          : "#ffff00"
+                  }}
+                >
+                  {sentimentSources.overallSentiment === "positive"
+                    ? "🟢"
+                    : sentimentSources.overallSentiment === "negative"
+                      ? "🔴"
+                      : "🟡"}{" "}
+                  {sentimentSources.overallSentiment.toUpperCase()} ({(sentimentSources.overallScore * 100).toFixed(0)}%)
+                </p>
               </div>
             </div>
           )}
