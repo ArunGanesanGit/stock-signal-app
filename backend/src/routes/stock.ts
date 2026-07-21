@@ -17,21 +17,34 @@ router.get("/", async (req: Request, res: Response<ApiResponse<any>>) => {
 // GET /api/stocks/:symbol - Get stock by symbol
 router.get("/:symbol", async (req: Request, res: Response<ApiResponse<any>>) => {
   const { symbol } = req.params;
-  const stock = await stockService.getStockBySymbol(symbol);
 
-  if (!stock) {
-    return res.status(404).json({
-      success: false,
-      error: `Stock with symbol ${symbol} not found`,
+  try {
+    const stock = await stockService.getStockBySymbol(symbol);
+
+    if (!stock) {
+      return res.status(404).json({
+        success: false,
+        error: `Stock with symbol ${symbol} not found`,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    res.json({
+      success: true,
+      data: stock,
       timestamp: new Date().toISOString()
     });
+  } catch (error: any) {
+    if (error.message === "RATE_LIMIT_EXCEEDED") {
+      return res.status(429).json({
+        success: false,
+        error: "API Rate Limit Exceeded",
+        details: "You've reached the maximum API calls. Please try again in a few minutes.",
+        timestamp: new Date().toISOString()
+      });
+    }
+    throw error;
   }
-
-  res.json({
-    success: true,
-    data: stock,
-    timestamp: new Date().toISOString()
-  });
 });
 
 // GET /api/stocks/search?q=query - Search stocks

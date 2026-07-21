@@ -35,6 +35,13 @@ export async function getStockQuote(symbol: string): Promise<QuoteData | null> {
     );
     const data = await response.json();
 
+    // Check for rate limit error
+    if (data["Note"] || data["Information"]) {
+      const error = new Error("RATE_LIMIT_EXCEEDED");
+      (error as any).apiMessage = data["Note"] || data["Information"];
+      throw error;
+    }
+
     if (data["Global Quote"] && data["Global Quote"]["05. price"]) {
       const quote = data["Global Quote"];
       return {
@@ -47,7 +54,10 @@ export async function getStockQuote(symbol: string): Promise<QuoteData | null> {
         low52Week: parseFloat(quote["52. 52 week low"] || 0)
       };
     }
-  } catch (error) {
+  } catch (error: any) {
+    if (error.message === "RATE_LIMIT_EXCEEDED") {
+      throw error;
+    }
     console.error("AlphaVantage API error:", error);
   }
 
