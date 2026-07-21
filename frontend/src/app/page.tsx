@@ -7,50 +7,30 @@ export default function Home() {
   return (
     <div className="space-y-12">
       {/* Hero Section - Professional Dark */}
-      <section style={{ backgroundColor: '#151B24', padding: '40px 24px', borderRadius: '8px', borderLeft: '4px solid #FF6666' }}>
-        <h1 style={{ fontSize: '40px', fontWeight: 'bold', marginBottom: '16px', color: '#FFB800' }}>
+      <div className="rounded-lg border-l-4 p-10 bg-black" style={{ backgroundColor: '#151B24', borderLeftColor: '#FF6666' }}>
+        <h1 className="mb-4 text-4xl font-bold" style={{ color: '#FFB800' }}>
           Stock Signal Analyzer
         </h1>
-        <p style={{ fontSize: '16px', marginBottom: '24px', color: '#E0E0E0', lineHeight: '1.6' }}>
+        <p className="mb-6 text-base leading-relaxed" style={{ color: '#E0E0E0' }}>
           Real-time trading signals powered by technical analysis and news sentiment
         </p>
-        <div style={{ display: 'flex', gap: '16px' }}>
+        <div className="flex gap-4">
           <Link
             href="/signals"
-            style={{
-              backgroundColor: '#FF6666',
-              color: 'white',
-              padding: '12px 24px',
-              borderRadius: '6px',
-              fontWeight: '600',
-              fontSize: '14px',
-              textDecoration: 'none',
-              transition: 'background-color 0.2s'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FF7777'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FF6666'}
+            className="rounded px-6 py-3 font-semibold transition-colors"
+            style={{ backgroundColor: '#FF6666', color: 'white' }}
           >
             View All Signals
           </Link>
           <Link
             href="/stocks"
-            style={{
-              backgroundColor: '#FFB800',
-              color: '#000000',
-              padding: '12px 24px',
-              borderRadius: '6px',
-              fontWeight: '600',
-              fontSize: '14px',
-              textDecoration: 'none',
-              transition: 'background-color 0.2s'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FFC933'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFB800'}
+            className="rounded px-6 py-3 font-semibold transition-colors"
+            style={{ backgroundColor: '#FFB800', color: '#000000' }}
           >
             Browse Stocks
           </Link>
         </div>
-      </section>
+      </div>
 
       {/* Interactive Dashboard */}
       <section>
