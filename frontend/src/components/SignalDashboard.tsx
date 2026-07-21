@@ -14,11 +14,12 @@ interface NewsArticle {
 
 interface SourceSentiment {
   source: string;
-  sentiment: "positive" | "neutral" | "negative";
+  sentiment: "positive" | "neutral" | "negative" | "error";
   score: number;
   confidence: number;
   articles: number;
   summary: string;
+  error?: string;
 }
 
 interface MultiSourceSentiment {
@@ -317,86 +318,135 @@ export default function SignalDashboard() {
             </div>
           )}
 
-          {/* Multi-Source Sentiment Analysis */}
-          {sentimentSources && sentimentSources.sources.length > 0 && (
-            <div style={{ marginTop: "16px", backgroundColor: "#0a0a0a", borderRadius: "4px", padding: "12px", border: "1px solid #FFA500" }}>
-              <h3 style={{ fontWeight: "bold", color: "#FFA500", marginBottom: "12px", fontSize: "12px" }}>🔍 Sentiment from Multiple Sources</h3>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "10px" }}>
-                {sentimentSources.sources.map((source, idx) => {
-                  const sentimentColor =
-                    source.sentiment === "positive"
-                      ? "#00ff00"
-                      : source.sentiment === "negative"
-                        ? "#ff0000"
-                        : "#ffff00";
-                  const bgColor =
-                    source.sentiment === "positive"
-                      ? "#001a00"
-                      : source.sentiment === "negative"
-                        ? "#1a0000"
-                        : "#1a1a00";
+          {/* Multi-Source Sentiment Analysis - Individual Cards */}
+          {sentimentSources && (
+            <div style={{ marginTop: "16px" }}>
+              <h3 style={{ fontWeight: "bold", color: "#FFA500", marginBottom: "12px", fontSize: "13px" }}>🔍 Sentiment Analysis (Multiple Sources)</h3>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px", marginBottom: "12px" }}>
+                {sentimentSources.sources && sentimentSources.sources.length > 0 ? (
+                  sentimentSources.sources.map((source, idx) => {
+                    const sentimentColor =
+                      source.sentiment === "positive"
+                        ? "#00ff00"
+                        : source.sentiment === "negative"
+                          ? "#ff0000"
+                          : source.sentiment === "error"
+                            ? "#ff6666"
+                            : "#ffff00";
+                    const bgColor =
+                      source.sentiment === "positive"
+                        ? "#001a00"
+                        : source.sentiment === "negative"
+                          ? "#1a0000"
+                          : source.sentiment === "error"
+                            ? "#2a1a1a"
+                            : "#1a1a00";
 
-                  return (
-                    <div
-                      key={idx}
-                      style={{
-                        backgroundColor: bgColor,
-                        borderRadius: "4px",
-                        padding: "10px",
-                        border: `1px solid ${sentimentColor}`,
-                        textAlign: "center"
-                      }}
-                    >
-                      <p style={{ fontSize: "9px", color: "#888888", marginBottom: "4px" }}>
-                        {source.source}
-                      </p>
-                      <p
+                    return (
+                      <div
+                        key={idx}
                         style={{
-                          fontSize: "16px",
-                          fontWeight: "bold",
-                          color: sentimentColor,
-                          textTransform: "uppercase",
-                          marginBottom: "6px"
+                          backgroundColor: bgColor,
+                          borderRadius: "6px",
+                          padding: "14px",
+                          border: `2px solid ${sentimentColor}`,
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "8px"
                         }}
                       >
-                        {source.sentiment === "positive"
-                          ? "🟢"
-                          : source.sentiment === "negative"
-                            ? "🔴"
-                            : "🟡"}{" "}
-                        {source.sentiment}
-                      </p>
-                      <p style={{ fontSize: "9px", color: "#cccccc", marginBottom: "4px" }}>
-                        {source.summary}
-                      </p>
-                      {source.articles > 0 && (
-                        <p style={{ fontSize: "8px", color: "#888888" }}>
-                          {source.articles} articles analyzed
+                        <p style={{ fontSize: "11px", color: "#888888", margin: 0, fontWeight: "bold" }}>
+                          {source.source}
                         </p>
-                      )}
-                    </div>
-                  );
-                })}
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                          <p
+                            style={{
+                              fontSize: "20px",
+                              fontWeight: "bold",
+                              color: sentimentColor,
+                              textTransform: "uppercase",
+                              margin: 0
+                            }}
+                          >
+                            {source.sentiment === "positive"
+                              ? "🟢"
+                              : source.sentiment === "negative"
+                                ? "🔴"
+                                : source.sentiment === "error"
+                                  ? "❌"
+                                  : "🟡"}
+                          </p>
+                          <p style={{ fontSize: "12px", fontWeight: "bold", color: sentimentColor, margin: 0 }}>
+                            {source.sentiment === "error" ? "ERROR" : source.sentiment}
+                          </p>
+                        </div>
+                        <div style={{ borderTop: `1px solid ${sentimentColor}`, paddingTop: "8px" }}>
+                          {source.sentiment === "error" ? (
+                            <p style={{ fontSize: "10px", color: "#ff6666", margin: "4px 0", fontWeight: "bold" }}>
+                              ⚠️ {source.error || source.summary}
+                            </p>
+                          ) : (
+                            <>
+                              <p style={{ fontSize: "10px", color: "#cccccc", margin: "4px 0" }}>
+                                {source.summary}
+                              </p>
+                              <div style={{ display: "flex", justifyContent: "space-between", gap: "8px", marginTop: "6px" }}>
+                                {source.articles > 0 && (
+                                  <p style={{ fontSize: "9px", color: "#888888", margin: 0 }}>
+                                    📰 {source.articles} articles
+                                  </p>
+                                )}
+                                <p style={{ fontSize: "9px", color: "#888888", margin: 0 }}>
+                                  💪 {(source.confidence * 100).toFixed(0)}% confidence
+                                </p>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div
+                    style={{
+                      backgroundColor: "#1a0000",
+                      borderRadius: "6px",
+                      padding: "14px",
+                      border: "2px solid #ff0000",
+                      gridColumn: "1 / -1"
+                    }}
+                  >
+                    <p style={{ color: "#ff0000", fontWeight: "bold", fontSize: "11px", margin: "0 0 6px 0" }}>
+                      ⚠️ No Sentiment Data Available
+                    </p>
+                    <p style={{ color: "#ff6666", fontSize: "10px", margin: 0 }}>
+                      All sentiment sources are currently unavailable. Please try again later.
+                    </p>
+                  </div>
+                )}
               </div>
-              <div style={{ marginTop: "12px", padding: "8px", backgroundColor: "#1a1a1a", borderRadius: "4px", border: `1px solid ${sentimentSources.overallSentiment === "positive" ? "#00ff00" : sentimentSources.overallSentiment === "negative" ? "#ff0000" : "#ffff00"}` }}>
-                <p style={{ fontSize: "9px", color: "#888888", marginBottom: "4px" }}>Overall Sentiment (Weighted Average)</p>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                    color:
-                      sentimentSources.overallSentiment === "positive"
-                        ? "#00ff00"
-                        : sentimentSources.overallSentiment === "negative"
-                          ? "#ff0000"
-                          : "#ffff00"
-                  }}
-                >
-                  {sentimentSources.overallSentiment === "positive"
-                    ? "🟢"
-                    : sentimentSources.overallSentiment === "negative"
-                      ? "🔴"
-                      : "🟡"}{" "}
+              <div style={{ padding: "12px", backgroundColor: "#1a1a1a", borderRadius: "6px", border: `1px solid ${sentimentSources.overallSentiment === "positive" ? "#00ff00" : sentimentSources.overallSentiment === "negative" ? "#ff0000" : "#ffff00"}` }}>
+                <p style={{ fontSize: "10px", color: "#888888", margin: "0 0 8px 0", fontWeight: "bold" }}>📊 OVERALL SENTIMENT (Weighted Average)</p>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <p
+                    style={{
+                      fontSize: "28px",
+                      fontWeight: "bold",
+                      color:
+                        sentimentSources.overallSentiment === "positive"
+                          ? "#00ff00"
+                          : sentimentSources.overallSentiment === "negative"
+                            ? "#ff0000"
+                            : "#ffff00",
+                      margin: 0,
+                      textTransform: "uppercase"
+                    }}
+                  >
+                    {sentimentSources.overallSentiment === "positive"
+                      ? "🟢"
+                      : sentimentSources.overallSentiment === "negative"
+                        ? "🔴"
+                        : "🟡"}{" "}
                   {sentimentSources.overallSentiment.toUpperCase()} ({(sentimentSources.overallScore * 100).toFixed(0)}%)
                 </p>
               </div>

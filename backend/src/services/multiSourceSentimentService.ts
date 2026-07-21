@@ -3,11 +3,12 @@ import sentimentService from "./sentimentService";
 
 export interface SourceSentiment {
   source: string;
-  sentiment: "positive" | "neutral" | "negative";
+  sentiment: "positive" | "neutral" | "negative" | "error";
   score: number; // 0-1, where 0.5 is neutral
   confidence: number; // 0-1
   articles: number;
   summary: string;
+  error?: string; // Error message if source failed
 }
 
 export interface MultiSourceSentiment {
@@ -39,9 +40,28 @@ class MultiSourceSentimentService {
       const finnhubSentiment = await this.getFinnhubSentiment(symbol);
       if (finnhubSentiment) {
         sources.push(finnhubSentiment);
+      } else {
+        sources.push({
+          source: "Finnhub News API",
+          sentiment: "error",
+          score: 0.5,
+          confidence: 0,
+          articles: 0,
+          summary: "No data available",
+          error: "API key not configured or no data found"
+        });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.warn("Finnhub sentiment fetch failed:", error);
+      sources.push({
+        source: "Finnhub News API",
+        sentiment: "error",
+        score: 0.5,
+        confidence: 0,
+        articles: 0,
+        summary: "API Error",
+        error: error.message || "Failed to fetch data"
+      });
     }
 
     // 3. Alpha Vantage News Function (free tier)
@@ -49,9 +69,28 @@ class MultiSourceSentimentService {
       const avNewsSentiment = await this.getAlphaVantageNewsSentiment(symbol);
       if (avNewsSentiment) {
         sources.push(avNewsSentiment);
+      } else {
+        sources.push({
+          source: "Alpha Vantage News Sentiment",
+          sentiment: "error",
+          score: 0.5,
+          confidence: 0,
+          articles: 0,
+          summary: "No data available",
+          error: "API key not configured or rate limited"
+        });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.warn("Alpha Vantage news sentiment fetch failed:", error);
+      sources.push({
+        source: "Alpha Vantage News Sentiment",
+        sentiment: "error",
+        score: 0.5,
+        confidence: 0,
+        articles: 0,
+        summary: "API Error",
+        error: error.message || "Failed to fetch data"
+      });
     }
 
     // 4. NewsAPI (already integrated)
@@ -59,9 +98,28 @@ class MultiSourceSentimentService {
       const newsapiSentiment = await this.getNewsAPISentiment(symbol);
       if (newsapiSentiment) {
         sources.push(newsapiSentiment);
+      } else {
+        sources.push({
+          source: "NewsAPI",
+          sentiment: "error",
+          score: 0.5,
+          confidence: 0,
+          articles: 0,
+          summary: "No data available",
+          error: "API key not configured or no data found"
+        });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.warn("NewsAPI sentiment fetch failed:", error);
+      sources.push({
+        source: "NewsAPI",
+        sentiment: "error",
+        score: 0.5,
+        confidence: 0,
+        articles: 0,
+        summary: "Rate Limit",
+        error: "Too many requests (100/day free tier)"
+      });
     }
 
     // 5. RSS Feed Sentiment (Yahoo Finance, Seeking Alpha)
@@ -69,9 +127,28 @@ class MultiSourceSentimentService {
       const rssSentiment = await this.getRSSSentiment(symbol);
       if (rssSentiment) {
         sources.push(rssSentiment);
+      } else {
+        sources.push({
+          source: "Yahoo Finance RSS",
+          sentiment: "error",
+          score: 0.5,
+          confidence: 0,
+          articles: 0,
+          summary: "No data available",
+          error: "Unable to fetch RSS feed"
+        });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.warn("RSS feed sentiment fetch failed:", error);
+      sources.push({
+        source: "Yahoo Finance RSS",
+        sentiment: "error",
+        score: 0.5,
+        confidence: 0,
+        articles: 0,
+        summary: "Network Error",
+        error: "Feed unavailable or connection timeout"
+      });
     }
 
     // Calculate overall sentiment from all sources
